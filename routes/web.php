@@ -31,6 +31,17 @@ $router->group([
 
     });
 
+    // localhost:8000/api/group
+    $router->group([
+        'prefix' => 'group',
+    ], function ($router) {
+        $router->get('view', 'GroupController@view');
+        $router->post('create', 'GroupController@create');
+        $router->post('delete', 'GroupController@delete');
+        $router->post('update', 'GroupController@update');
+
+    });
+
     $router->get('/tes', function () {
         return 'Hello from API Tes';
     });
