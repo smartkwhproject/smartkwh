@@ -42,6 +42,17 @@ $router->group([
 
     });
 
+    // localhost:8000/api/role
+    $router->group([
+        'prefix' => 'role',
+    ], function ($router) {
+        $router->get('view', 'RoleController@view');
+        $router->post('create', 'RoleController@create');
+        $router->post('delete', 'RoleController@delete');
+        $router->post('update', 'RoleController@update');
+
+    });
+
     $router->get('/tes', function () {
         return 'Hello from API Tes';
     });

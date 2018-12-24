@@ -47,7 +47,7 @@ class UserController extends Controller
 
         $user            = new User();
         $user->username  = $request->username;
-        $user->password  = $request->password;
+        $user->password  = app('hash')->make($request->password);
         $user->api_token = '-';
         $user->save();
 

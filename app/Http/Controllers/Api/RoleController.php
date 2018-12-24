@@ -3,11 +3,11 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Models\Group;
+use App\Models\Role;
 use Illuminate\Http\Request;
 use Validator;
 
-class GroupController extends Controller
+class RoleController extends Controller
 {
     /**
      * Create a new controller instance.
@@ -21,8 +21,8 @@ class GroupController extends Controller
 
     public function view()
     {
-        $group    = new Group();
-        $response = $group->paginate(1);
+        $role     = new Role();
+        $response = $role->paginate(1);
 
         return $response;
     }
@@ -35,8 +35,8 @@ class GroupController extends Controller
         );
 
         $validator = Validator::make($request->all(), [
-            'name'        => 'required|unique:group',
-            'description' => 'required',
+            'user_id'  => 'required',
+            'group_id' => 'required',
         ]);
 
         if ($validator->fails()) {
@@ -45,18 +45,18 @@ class GroupController extends Controller
             return $response;
         }
 
-        $group              = new Group();
-        $group->name        = $request->name;
-        $group->description = $request->description;
-        $group->save();
+        $role           = new Role();
+        $role->user_id  = $request->user_id;
+        $role->group_id = $request->group_id;
+        $role->save();
 
-        return $group;
+        return $role;
     }
 
     public function delete(Request $request)
     {
-        $group = new Group();
-        $found = $group->where('id', $request->id)->first();
+        $role  = new Role();
+        $found = $role->where('id', $request->id)->first();
 
         if ($found) {
             $found->delete();
@@ -72,16 +72,16 @@ class GroupController extends Controller
 
     public function update(Request $request)
     {
-        $group    = new Group();
-        $found    = $group->where('id', $request->id)->first();
+        $role     = new Role();
+        $found    = $role->where('id', $request->id)->first();
         $response = array(
             'status'  => false,
             'message' => 'Failed Update',
         );
 
         if ($found) {
-            $found->name        = $request->name;
-            $found->description = $request->description;
+            $found->user_id  = $request->user_id;
+            $found->group_id = $request->group_id;
             $found->save();
 
             $response['status']  = true;
