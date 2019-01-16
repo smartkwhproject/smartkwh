@@ -35,6 +35,7 @@ class UserController extends Controller
         );
 
         $validator = Validator::make($request->all(), [
+            'name'     => 'required',
             'username' => 'required|unique:user',
             'password' => 'required',
         ]);
@@ -46,9 +47,10 @@ class UserController extends Controller
         }
 
         $user            = new User();
+        $user->name      = $request->name;
         $user->username  = $request->username;
         $user->password  = app('hash')->make($request->password);
-        $user->api_token = '-';
+        $user->api_token = \base64_encode($request->username) . '.' . \base64_encode(date('Y-m-d H:i:s')) . '.' . \base64_encode(\str_random(5));
         $user->save();
 
         return $user;
@@ -81,6 +83,7 @@ class UserController extends Controller
         );
 
         if ($found) {
+            $found->name      = $request->name;
             $found->username  = $request->username;
             $found->password  = $request->password;
             $found->api_token = '-';

@@ -15,6 +15,11 @@ $router->get('/', function () use ($router) {
     return 'Hello';
 });
 
+//Generate Application Key
+$router->get('/key', function () {
+    return str_random(32);
+});
+
 $router->group([
     'prefix'    => 'api',
     'namespace' => 'Api',
@@ -22,7 +27,8 @@ $router->group([
 
     // localhost:8000/api/user
     $router->group([
-        'prefix' => 'user',
+        'prefix'     => 'user',
+        'middleware' => 'auth',
     ], function ($router) {
         $router->get('view', 'UserController@view');
         $router->post('create', 'UserController@create');
@@ -53,7 +59,17 @@ $router->group([
 
     });
 
+    // localhost:8000/api/auth
+    $router->group([
+        'prefix' => 'auth',
+    ], function ($router) {
+        $router->post('login', 'AuthController@login');
+
+    });
+
+    //localhost:8000/api/tes
     $router->get('/tes', function () {
         return 'Hello from API Tes';
     });
+
 });
