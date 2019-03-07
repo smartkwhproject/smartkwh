@@ -56,7 +56,6 @@ $router->group([
         $router->post('create', 'RoleController@create');
         $router->post('delete', 'RoleController@delete');
         $router->post('update', 'RoleController@update');
-
     });
 
     // localhost:8000/api/auth
@@ -65,6 +64,69 @@ $router->group([
     ], function ($router) {
         $router->post('login', 'AuthController@login');
 
+    });
+
+    //localhost:8000/api/category_mcb
+    $router->group([
+        'prefix' => 'category_mcb',
+    ], function ($router) {
+        $router->get('view', 'Category_mcbController@view');
+        $router->post('create', 'Category_mcbController@create');
+        $router->post('delete', 'Category_mcbController@delete');
+        $router->post('update', 'Category_mcbController@update');
+
+    });
+
+    //localhost:8000/api/building
+    $router->group([
+        'prefix' => 'building',
+    ], function ($router) {
+        $router->get('view', 'BuildingController@view');
+        $router->post('create', 'BuildingController@create');
+        $router->post('delete', 'BuildingController@delete');
+        $router->post('update', 'BuildingController@update');
+
+    });
+
+    //localhost:8000/api/specification_mcb
+    $router->group([
+        'prefix' => 'specification_mcb',
+    ], function ($router) {
+        $router->get('view', 'Specification_mcbController@view');
+        $router->post('create', 'Specification_mcbController@create');
+        $router->post('delete', 'Specification_mcbController@delete');
+        $router->post('update', 'Specification_mcbController@update');
+
+    });
+
+    // localhost:8000/api/block
+    $router->group([
+        'prefix' => 'block',
+    ], function ($router) {
+        $router->get('view', 'BlockController@view');
+        $router->post('create', 'BlockController@create');
+        $router->post('delete', 'BlockController@delete');
+        $router->post('update', 'BlockController@update');
+    });
+
+    // localhost:8000/api/mcb
+    $router->group([
+        'prefix' => 'mcb',
+    ], function ($router) {
+        $router->get('view', 'McbController@view');
+        $router->post('create', 'McbController@create');
+        $router->post('delete', 'McbController@delete');
+        $router->post('update', 'McbController@update');
+    });
+
+    // localhost:8000/api/mcb_transaction
+    $router->group([
+        'prefix' => 'mcb_transaction',
+    ], function ($router) {
+        $router->get('view', 'Mcb_transactionController@view');
+        $router->post('create', 'Mcb_transactionController@create');
+        $router->post('delete', 'Mcb_transactionController@delete');
+        $router->post('update', 'Mcb_transactionController@update');
     });
 
     //localhost:8000/api/tes
