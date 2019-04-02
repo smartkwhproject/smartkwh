@@ -3,11 +3,11 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Models\Specification_mcb;
+use App\Models\Specification_Mcb;
 use Illuminate\Http\Request;
 use Validator;
 
-class Specification_mcbController extends Controller
+class Specification_McbController extends Controller
 {
     /**
      * Create a new controller instance.
@@ -21,7 +21,7 @@ class Specification_mcbController extends Controller
 
     public function view()
     {
-        $specification_mcb = new Specification_mcb();
+        $specification_mcb = new Specification_Mcb();
         $response          = $specification_mcb->paginate(1);
 
         return $response;
@@ -48,7 +48,7 @@ class Specification_mcbController extends Controller
             return $response;
         }
 
-        $specification_mcb                = new Specification_mcb();
+        $specification_mcb                = new Specification_Mcb();
         $specification_mcb->colour        = $request->colour;
         $specification_mcb->weight        = $request->weight;
         $specification_mcb->healty_status = $request->healty_status;
@@ -61,7 +61,7 @@ class Specification_mcbController extends Controller
 
     public function delete(Request $request)
     {
-        $specification_mcb = new Specification_mcb();
+        $specification_mcb = new Specification_Mcb();
         $found             = $specification_mcb->where('id', $request->id)->first();
 
         if ($found) {
@@ -78,7 +78,7 @@ class Specification_mcbController extends Controller
 
     public function update(Request $request)
     {
-        $specification_mcb = new Specification_mcb();
+        $specification_mcb = new Specification_Mcb();
         $found             = $specification_mcb->where('id', $request->id)->first();
         $response          = array(
             'status'  => false,

@@ -3,11 +3,11 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Models\Mcb_transaction;
+use App\Models\Mcb_Transaction;
 use Illuminate\Http\Request;
 use Validator;
 
-class Mcb_transactionController extends Controller
+class Mcb_TransactionController extends Controller
 {
     /**
      * Create a new controller instance.
@@ -21,7 +21,7 @@ class Mcb_transactionController extends Controller
 
     public function view()
     {
-        $mcb_transaction = new Mcb_transaction();
+        $mcb_transaction = new Mcb_Transaction();
         $response        = $mcb_transaction->paginate(1);
 
         return $response;
@@ -51,7 +51,7 @@ class Mcb_transactionController extends Controller
             return $response;
         }
 
-        $mcb_transaction                  = new Mcb_transaction();
+        $mcb_transaction                  = new Mcb_Transaction();
         $mcb_transaction->datemcb         = $request->datemcb;
         $mcb_transaction->timemcb         = $request->timemcb;
         $mcb_transaction->current         = $request->current;
@@ -67,7 +67,7 @@ class Mcb_transactionController extends Controller
 
     public function delete(Request $request)
     {
-        $mcb_transaction = new Mcb_transaction();
+        $mcb_transaction = new Mcb_Transaction();
         $found           = $mcb_transaction->where('id', $request->id)->first();
 
         if ($found) {
@@ -84,7 +84,7 @@ class Mcb_transactionController extends Controller
 
     public function update(Request $request)
     {
-        $mcb_transaction = new Mcb_transaction();
+        $mcb_transaction = new Mcb_Transaction();
         $found           = $mcb_transaction->where('id', $request->id)->first();
         $response        = array(
             'status'  => false,

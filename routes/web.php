@@ -70,10 +70,10 @@ $router->group([
     $router->group([
         'prefix' => 'category_mcb',
     ], function ($router) {
-        $router->get('view', 'Category_mcbController@view');
-        $router->post('create', 'Category_mcbController@create');
-        $router->post('delete', 'Category_mcbController@delete');
-        $router->post('update', 'Category_mcbController@update');
+        $router->get('view', 'Category_McbController@view');
+        $router->post('create', 'Category_McbController@create');
+        $router->post('delete', 'Category_McbController@delete');
+        $router->post('update', 'Category_McbController@update');
 
     });
 
@@ -92,10 +92,10 @@ $router->group([
     $router->group([
         'prefix' => 'specification_mcb',
     ], function ($router) {
-        $router->get('view', 'Specification_mcbController@view');
-        $router->post('create', 'Specification_mcbController@create');
-        $router->post('delete', 'Specification_mcbController@delete');
-        $router->post('update', 'Specification_mcbController@update');
+        $router->get('view', 'Specification_McbController@view');
+        $router->post('create', 'Specification_McbController@create');
+        $router->post('delete', 'Specification_McbController@delete');
+        $router->post('update', 'Specification_McbController@update');
 
     });
 
@@ -123,10 +123,10 @@ $router->group([
     $router->group([
         'prefix' => 'mcb_transaction',
     ], function ($router) {
-        $router->get('view', 'Mcb_transactionController@view');
-        $router->post('create', 'Mcb_transactionController@create');
-        $router->post('delete', 'Mcb_transactionController@delete');
-        $router->post('update', 'Mcb_transactionController@update');
+        $router->get('view', 'Mcb_TransactionController@view');
+        $router->post('create', 'Mcb_TransactionController@create');
+        $router->post('delete', 'Mcb_TransactionController@delete');
+        $router->post('update', 'Mcb_TransactionController@update');
     });
 
     //localhost:8000/api/tes

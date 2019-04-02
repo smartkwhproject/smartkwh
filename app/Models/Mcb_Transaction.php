@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Mcb_transaction extends Model
+class Mcb_Transaction extends Model
 {
 
     protected $table = "mcb_transaction";

@@ -4,10 +4,10 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Category_mcb extends Model
+class Specification_Mcb extends Model
 {
 
-    protected $table = "category_mcb";
+    protected $table = "specification_mcb";
 
     /**
      * The attributes that are mass assignable.
@@ -15,7 +15,7 @@ class Category_mcb extends Model
      * @var array
      */
     protected $fillable = [
-        'category_name', 'min', 'max',
+        'colour', 'weight', 'healty_status', 'max_voltage', 'power_factor',
     ];
 
 }

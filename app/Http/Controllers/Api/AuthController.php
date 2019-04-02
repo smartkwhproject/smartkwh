@@ -17,20 +17,28 @@ class AuthController extends Controller
     public function login(Request $request)
     {
 
-        $response   = 'User Not Found';
-        $statusCode = 404;
+        $response        = 'User Not Found';
+        $statusCode      = 404;
+        $payloadResponse = array(
+            'status'  => false,
+            'message' => '',
+            'token'   => '',
+        );
 
         $user = User::where('username', $request->get('username'))->first();
         if ($user) {
             $user->makeVisible('password');
             $validate = app('hash')->check($request->get('password'), $user->password);
             if ($validate) {
-                $response   = $user->api_token;
-                $statusCode = 200;
+                $response                   = $user->api_token;
+                $payloadResponse['status']  = true;
+                $payloadResponse['message'] = 'Success';
+                $payloadResponse['token']   = $response;
+                $statusCode                 = 200;
             }
         }
 
-        return response()->json($response, $statusCode);
+        return response()->json($payloadResponse, $statusCode);
 
     }
 }
