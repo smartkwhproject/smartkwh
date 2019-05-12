@@ -1,6 +1,6 @@
 <?php
 
-use App\Models\Mcb_Transaction;
+use App\Models\McbTransaction;
 use Illuminate\Database\Seeder;
 
 class create_mcb_transaction_seeder extends Seeder
@@ -13,7 +13,7 @@ class create_mcb_transaction_seeder extends Seeder
     public function run()
     {
         for ($i = 0; $i < 31; $i++) {
-            $mcbTransaction = new Mcb_Transaction();
+            $mcbTransaction = new McbTransaction();
             $payload        = [
                 'datemcb'         => date('Y-m-d'),
                 'timemcb'         => date('H:i:s'),
@@ -21,9 +21,11 @@ class create_mcb_transaction_seeder extends Seeder
                 'voltage'         => rand(0, 200),
                 'kwh'             => rand(0, 200),
                 'wh'              => rand(0, 200),
-                'mcb_id'          => rand(1, 2),
-                'block_id'        => rand(6, 8),
-                'category_mcb_id' => rand(1, 3),
+                'mcb_id'          => rand(1, 5),
+                'block_id'        => rand(1, 5),
+                'category_mcb_id' => rand(1, 4),
+                'stream_reff'     => rand(0, 200),
+                'voltage_reff'    => rand(0, 200),
             ];
             $mcbTransaction->createData($payload);
         }

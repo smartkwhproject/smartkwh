@@ -3,11 +3,11 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Models\Category_Mcb;
+use App\Models\CategoryMcb;
 use Illuminate\Http\Request;
 use Validator;
 
-class Category_McbController extends Controller
+class CategoryMcbController extends Controller
 {
     /**
      * Create a new controller instance.
@@ -21,7 +21,7 @@ class Category_McbController extends Controller
 
     public function view()
     {
-        $category_mcb = new Category_Mcb();
+        $category_mcb = new CategoryMcb();
         $response     = $category_mcb->paginate(1);
 
         return $response;
@@ -46,7 +46,7 @@ class Category_McbController extends Controller
             return $response;
         }
 
-        $category_mcb                = new Category_Mcb();
+        $category_mcb                = new CategoryMcb();
         $category_mcb->category_name = $request->category_name;
         $category_mcb->min           = $request->min;
         $category_mcb->max           = $request->max;
@@ -57,7 +57,7 @@ class Category_McbController extends Controller
 
     public function delete(Request $request)
     {
-        $category_mcb = new Category_Mcb();
+        $category_mcb = new CategoryMcb();
         $found        = $category_mcb->where('id', $request->id)->first();
 
         if ($found) {
@@ -74,7 +74,7 @@ class Category_McbController extends Controller
 
     public function update(Request $request)
     {
-        $category_mcb = new Category_Mcb();
+        $category_mcb = new CategoryMcb();
         $found        = $category_mcb->where('id', $request->id)->first();
         $response     = array(
             'status'  => false,

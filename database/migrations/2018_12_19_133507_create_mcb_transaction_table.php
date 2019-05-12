@@ -24,8 +24,8 @@ class CreateMcbTransactionTable extends Migration
             $table->integer('mcb_id')->unsigned();
             $table->integer('block_id')->unsigned();
             $table->integer('category_mcb_id')->unsigned();
-            $table->tinyInteger('stream_reff');
-            $table->tinyInteger('voltage_reff');
+            $table->double('stream_reff');
+            $table->double('voltage_reff');
             $table->foreign('mcb_id')
                 ->references('id')
                 ->on('mcb')

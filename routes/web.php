@@ -12,7 +12,7 @@
  */
 
 $router->get('/', function () use ($router) {
-    return 'Hello';
+    return 'Hello There!';
 });
 
 //Generate Application Key
@@ -27,8 +27,7 @@ $router->group([
 
     // localhost:8000/api/user
     $router->group([
-        'prefix'     => 'user',
-        'middleware' => 'auth',
+        'prefix' => 'user',
     ], function ($router) {
         $router->get('view', 'UserController@view');
         $router->post('create', 'UserController@create');
@@ -70,10 +69,10 @@ $router->group([
     $router->group([
         'prefix' => 'category_mcb',
     ], function ($router) {
-        $router->get('view', 'Category_McbController@view');
-        $router->post('create', 'Category_McbController@create');
-        $router->post('delete', 'Category_McbController@delete');
-        $router->post('update', 'Category_McbController@update');
+        $router->get('view', 'CategoryMcbController@view');
+        $router->post('create', 'CategoryMcbController@create');
+        $router->post('delete', 'CategoryMcbController@delete');
+        $router->post('update', 'CategoryMcbController@update');
 
     });
 
@@ -92,10 +91,10 @@ $router->group([
     $router->group([
         'prefix' => 'specification_mcb',
     ], function ($router) {
-        $router->get('view', 'Specification_McbController@view');
-        $router->post('create', 'Specification_McbController@create');
-        $router->post('delete', 'Specification_McbController@delete');
-        $router->post('update', 'Specification_McbController@update');
+        $router->get('view', 'SpecificationMcbController@view');
+        $router->post('create', 'SpecificationMcbController@create');
+        $router->post('delete', 'SpecificationMcbController@delete');
+        $router->post('update', 'SpecificationMcbController@update');
 
     });
 
@@ -123,11 +122,11 @@ $router->group([
     $router->group([
         'prefix' => 'mcb_transaction',
     ], function ($router) {
-        $router->get('view', 'Mcb_TransactionController@view');
-        $router->post('create', 'Mcb_TransactionController@create');
-        $router->post('delete', 'Mcb_TransactionController@delete');
-        $router->post('update', 'Mcb_TransactionController@update');
-        $router->get('getMcbTransaction', 'Mcb_TransactionController@getMcbTransaction');
+        $router->get('view', 'McbTransactionController@view');
+        $router->post('create', 'McbTransactionController@create');
+        $router->post('delete', 'McbTransactionController@delete');
+        $router->post('update', 'McbTransactionController@update');
+        $router->get('getMcbTransaction', 'McbTransactionController@getMcbTransaction');
     });
 
     //localhost:8000/api/tes

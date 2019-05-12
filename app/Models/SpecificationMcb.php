@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Specification_Mcb extends Model
+class SpecificationMcb extends Model
 {
 
     protected $table = "specification_mcb";
@@ -15,7 +15,7 @@ class Specification_Mcb extends Model
      * @var array
      */
     protected $fillable = [
-        'colour', 'weight', 'healty_status', 'max_voltage', 'power_factor',
+        'colour', 'max_stream', 'max_voltage',
     ];
 
 }

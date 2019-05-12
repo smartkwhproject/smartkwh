@@ -3,11 +3,11 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Models\Specification_Mcb;
+use App\Models\SpecificationMcb;
 use Illuminate\Http\Request;
 use Validator;
 
-class Specification_McbController extends Controller
+class SpecificationMcbController extends Controller
 {
     /**
      * Create a new controller instance.
@@ -21,7 +21,7 @@ class Specification_McbController extends Controller
 
     public function view()
     {
-        $specification_mcb = new Specification_Mcb();
+        $specification_mcb = new SpecificationMcb();
         $response          = $specification_mcb->paginate(1);
 
         return $response;
@@ -35,11 +35,9 @@ class Specification_McbController extends Controller
         );
 
         $validator = Validator::make($request->all(), [
-            'colour'        => 'required',
-            'weight'        => 'required',
-            'healty_status' => 'required',
-            'max_voltage'   => 'required',
-            'power_factor'  => 'required',
+            'colour'      => 'required',
+            'max_stream'  => 'required',
+            'max_voltage' => 'required',
         ]);
 
         if ($validator->fails()) {
@@ -48,12 +46,10 @@ class Specification_McbController extends Controller
             return $response;
         }
 
-        $specification_mcb                = new Specification_Mcb();
-        $specification_mcb->colour        = $request->colour;
-        $specification_mcb->weight        = $request->weight;
-        $specification_mcb->healty_status = $request->healty_status;
-        $specification_mcb->max_voltage   = $request->max_voltage;
-        $specification_mcb->power_factor  = $request->power_factor;
+        $specification_mcb              = new SpecificationMcb();
+        $specification_mcb->colour      = $request->colour;
+        $specification_mcb->max_stream  = $request->max_stream;
+        $specification_mcb->max_voltage = $request->max_voltage;
         $specification_mcb->save();
 
         return $specification_mcb;
@@ -61,7 +57,7 @@ class Specification_McbController extends Controller
 
     public function delete(Request $request)
     {
-        $specification_mcb = new Specification_Mcb();
+        $specification_mcb = new SpecificationMcb();
         $found             = $specification_mcb->where('id', $request->id)->first();
 
         if ($found) {
@@ -78,7 +74,7 @@ class Specification_McbController extends Controller
 
     public function update(Request $request)
     {
-        $specification_mcb = new Specification_Mcb();
+        $specification_mcb = new SpecificationMcb();
         $found             = $specification_mcb->where('id', $request->id)->first();
         $response          = array(
             'status'  => false,
@@ -86,11 +82,9 @@ class Specification_McbController extends Controller
         );
 
         if ($found) {
-            $found->colour        = $request->colour;
-            $found->weight        = $request->weight;
-            $found->healty_status = $request->healty_status;
-            $found->max_voltage   = $request->max_voltage;
-            $found->power_factor  = $request->power_factor;
+            $found->colour      = $request->colour;
+            $found->max_stream  = $request->max_stream;
+            $found->max_voltage = $request->max_voltage;
             $found->save();
 
             $response['status']  = true;

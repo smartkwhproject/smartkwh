@@ -16,10 +16,8 @@ class CreateSpecificationMcbTable extends Migration
         Schema::create('specification_mcb', function (Blueprint $table) {
             $table->increments('id');
             $table->string('colour');
-            $table->string('weight');
-            $table->string('healty_status');
+            $table->string('max_stream');
             $table->string('max_voltage');
-            $table->string('power_factor');
             $table->timestamps();
         });
     }
