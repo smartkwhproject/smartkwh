@@ -17,12 +17,14 @@ class CreateMcbTransactionTable extends Migration
             $table->increments('id');
             $table->date('datemcb');
             $table->time('timemcb');
-            $table->string('current');
-            $table->string('voltage');
-            $table->string('power');
+            $table->double('stream');
+            $table->double('voltage');
+            $table->double('power');
             $table->integer('mcb_id')->unsigned();
             $table->integer('block_id')->unsigned();
             $table->integer('category_mcb_id')->unsigned();
+            $table->tinyInteger('stream_reff');
+            $table->tinyInteger('voltage_reff');
             $table->foreign('mcb_id')
                 ->references('id')
                 ->on('mcb')
