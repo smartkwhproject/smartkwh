@@ -15,8 +15,18 @@ class Mcb_Transaction extends Model
      * @var array
      */
     protected $fillable = [
-        'datemcb', 'timemcb', 'current', 'voltage', 'power',
+        'datemcb', 'timemcb', 'stream', 'voltage', 'wh', 'kwh',
         'mcb_id', 'block_id', 'category_mcb_id',
     ];
+
+    public function createData($payload)
+    {
+        return Mcb_Transaction::create($payload);
+    }
+
+    public function mcbCategory()
+    {
+        return $this->hasOne(Category_Mcb::class, 'id', 'category_mcb_id');
+    }
 
 }

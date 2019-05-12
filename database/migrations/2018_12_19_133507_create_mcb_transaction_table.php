@@ -19,7 +19,8 @@ class CreateMcbTransactionTable extends Migration
             $table->time('timemcb');
             $table->double('stream');
             $table->double('voltage');
-            $table->double('power');
+            $table->double('wh');
+            $table->double('kwh');
             $table->integer('mcb_id')->unsigned();
             $table->integer('block_id')->unsigned();
             $table->integer('category_mcb_id')->unsigned();
