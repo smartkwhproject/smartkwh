@@ -127,6 +127,7 @@ $router->group([
         $router->post('create', 'Mcb_TransactionController@create');
         $router->post('delete', 'Mcb_TransactionController@delete');
         $router->post('update', 'Mcb_TransactionController@update');
+        $router->get('getMcbTransaction', 'Mcb_TransactionController@getMcbTransaction');
     });
 
     //localhost:8000/api/tes
