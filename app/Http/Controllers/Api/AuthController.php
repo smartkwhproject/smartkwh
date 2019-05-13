@@ -17,7 +17,7 @@ class AuthController extends Controller
         $statusCode      = 400;
         $payloadResponse = array(
             'status'  => false,
-            'message' => 'Failed',
+            'message' => 'Login Failed!',
             'token'   => '',
         );
         // Generate token
@@ -33,7 +33,7 @@ class AuthController extends Controller
                 $user->api_token = $token;
                 $user->save();
                 $payloadResponse['status']  = true;
-                $payloadResponse['message'] = 'Success';
+                $payloadResponse['message'] = 'Login Successfully!';
                 $payloadResponse['token']   = $token;
                 $statusCode                 = 200;
             }

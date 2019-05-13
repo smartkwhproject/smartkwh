@@ -32,7 +32,7 @@ class McbTransactionController extends Controller
         $mcbCategory = new CategoryMcb();
         $response    = array(
             'status'  => false,
-            'message' => "Failed",
+            'message' => "Failed to Create Transaction Proses!",
         );
 
         $mcb_transaction          = new McbTransaction();
@@ -73,7 +73,7 @@ class McbTransactionController extends Controller
 
         $response = array(
             'status'  => true,
-            'message' => 'Success Delete',
+            'message' => 'Success to Delete Transaction Proses!',
         );
 
         return $response;
@@ -85,7 +85,7 @@ class McbTransactionController extends Controller
         $found           = $mcb_transaction->where('id', $request->id)->first();
         $response        = array(
             'status'  => false,
-            'message' => 'Failed Update',
+            'message' => 'Failed to Update Transaction Proses!',
         );
 
         if ($found) {
@@ -103,7 +103,7 @@ class McbTransactionController extends Controller
             $found->save();
 
             $response['status']  = true;
-            $response['message'] = 'Success Update';
+            $response['message'] = 'Success to Update Transaction Proses!';
         }
 
         return $response;

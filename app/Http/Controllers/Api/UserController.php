@@ -31,7 +31,7 @@ class UserController extends Controller
     {
         $response = array(
             'status'  => false,
-            'message' => "Failed",
+            'message' => "Failed to Create an User!",
         );
 
         $validator = Validator::make($request->all(), [
@@ -67,7 +67,7 @@ class UserController extends Controller
 
         $response = array(
             'status'  => true,
-            'message' => 'Success Delete',
+            'message' => 'Success to Delete an User!',
         );
 
         return $response;
@@ -79,7 +79,7 @@ class UserController extends Controller
         $found    = $user->where('id', $request->id)->first();
         $response = array(
             'status'  => false,
-            'message' => 'Failed Update',
+            'message' => 'Failed to Update an User!',
         );
 
         if ($found) {
@@ -90,7 +90,7 @@ class UserController extends Controller
             $found->save();
 
             $response['status']  = true;
-            $response['message'] = 'Success Update';
+            $response['message'] = 'Success to Update an User!';
         }
 
         return $response;

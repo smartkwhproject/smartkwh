@@ -31,7 +31,7 @@ class BlockController extends Controller
     {
         $response = array(
             'status'  => false,
-            'message' => "Failed",
+            'message' => "Failed to Create a Block!",
         );
 
         $validator = Validator::make($request->all(), [
@@ -66,7 +66,7 @@ class BlockController extends Controller
 
         $response = array(
             'status'  => true,
-            'message' => 'Success Delete',
+            'message' => 'Success to Delete a Block!',
         );
 
         return $response;
@@ -78,7 +78,7 @@ class BlockController extends Controller
         $found    = $block->where('id', $request->id)->first();
         $response = array(
             'status'  => false,
-            'message' => 'Failed Update',
+            'message' => 'Failed to Update a Block!',
         );
 
         if ($found) {
@@ -88,7 +88,7 @@ class BlockController extends Controller
             $found->save();
 
             $response['status']  = true;
-            $response['message'] = 'Success Update';
+            $response['message'] = 'Success to Update a Block!';
         }
 
         return $response;

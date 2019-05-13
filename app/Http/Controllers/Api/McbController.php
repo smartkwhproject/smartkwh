@@ -31,7 +31,7 @@ class McbController extends Controller
     {
         $response = array(
             'status'  => false,
-            'message' => "Failed",
+            'message' => "Failed to Create MCB!",
         );
 
         $validator = Validator::make($request->all(), [
@@ -64,7 +64,7 @@ class McbController extends Controller
 
         $response = array(
             'status'  => true,
-            'message' => 'Success Delete',
+            'message' => 'Success to Delete MCB!',
         );
 
         return $response;
@@ -76,7 +76,7 @@ class McbController extends Controller
         $found    = $mcb->where('id', $request->id)->first();
         $response = array(
             'status'  => false,
-            'message' => 'Failed Update',
+            'message' => 'Failed to Update MCB!',
         );
 
         if ($found) {
@@ -85,7 +85,7 @@ class McbController extends Controller
             $found->save();
 
             $response['status']  = true;
-            $response['message'] = 'Success Update';
+            $response['message'] = 'Success to Update MCB!';
         }
 
         return $response;

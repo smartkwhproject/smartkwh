@@ -31,7 +31,7 @@ class GroupController extends Controller
     {
         $response = array(
             'status'  => false,
-            'message' => "Failed",
+            'message' => "Failed to Create a Group!",
         );
 
         $validator = Validator::make($request->all(), [
@@ -64,7 +64,7 @@ class GroupController extends Controller
 
         $response = array(
             'status'  => true,
-            'message' => 'Success Delete',
+            'message' => 'Success to Delete a Group!',
         );
 
         return $response;
@@ -76,7 +76,7 @@ class GroupController extends Controller
         $found    = $group->where('id', $request->id)->first();
         $response = array(
             'status'  => false,
-            'message' => 'Failed Update',
+            'message' => 'Failed to Update a Group!',
         );
 
         if ($found) {
@@ -85,7 +85,7 @@ class GroupController extends Controller
             $found->save();
 
             $response['status']  = true;
-            $response['message'] = 'Success Update';
+            $response['message'] = 'Success to Update a Group!';
         }
 
         return $response;

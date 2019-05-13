@@ -31,7 +31,7 @@ class RoleController extends Controller
     {
         $response = array(
             'status'  => false,
-            'message' => "Failed",
+            'message' => "Failed to Create Role!",
         );
 
         $validator = Validator::make($request->all(), [
@@ -64,7 +64,7 @@ class RoleController extends Controller
 
         $response = array(
             'status'  => true,
-            'message' => 'Success Delete',
+            'message' => 'Success to Delete Role!',
         );
 
         return $response;
@@ -76,7 +76,7 @@ class RoleController extends Controller
         $found    = $role->where('id', $request->id)->first();
         $response = array(
             'status'  => false,
-            'message' => 'Failed Update',
+            'message' => 'Failed to Update Role!',
         );
 
         if ($found) {
@@ -85,7 +85,7 @@ class RoleController extends Controller
             $found->save();
 
             $response['status']  = true;
-            $response['message'] = 'Success Update';
+            $response['message'] = 'Success to Update Role!';
         }
 
         return $response;

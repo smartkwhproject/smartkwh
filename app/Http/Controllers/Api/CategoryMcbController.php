@@ -31,7 +31,7 @@ class CategoryMcbController extends Controller
     {
         $response = array(
             'status'  => false,
-            'message' => "Failed",
+            'message' => "Failed to Create Category MCB!",
         );
 
         $validator = Validator::make($request->all(), [
@@ -66,7 +66,7 @@ class CategoryMcbController extends Controller
 
         $response = array(
             'status'  => true,
-            'message' => 'Success Delete',
+            'message' => 'Success to Delete Category MCB!',
         );
 
         return $response;
@@ -78,7 +78,7 @@ class CategoryMcbController extends Controller
         $found        = $category_mcb->where('id', $request->id)->first();
         $response     = array(
             'status'  => false,
-            'message' => 'Failed Update',
+            'message' => 'Failed to Update Category MCB!',
         );
 
         if ($found) {
@@ -88,7 +88,7 @@ class CategoryMcbController extends Controller
             $found->save();
 
             $response['status']  = true;
-            $response['message'] = 'Success Update';
+            $response['message'] = 'Success to Update Category MCB!';
         }
 
         return $response;

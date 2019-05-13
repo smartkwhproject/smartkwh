@@ -31,7 +31,7 @@ class SpecificationMcbController extends Controller
     {
         $response = array(
             'status'  => false,
-            'message' => "Failed",
+            'message' => "Failed to Create Specification of MCB!",
         );
 
         $validator = Validator::make($request->all(), [
@@ -66,7 +66,7 @@ class SpecificationMcbController extends Controller
 
         $response = array(
             'status'  => true,
-            'message' => 'Success Delete',
+            'message' => 'Success to Delete Specification of MCB!',
         );
 
         return $response;
@@ -78,7 +78,7 @@ class SpecificationMcbController extends Controller
         $found             = $specification_mcb->where('id', $request->id)->first();
         $response          = array(
             'status'  => false,
-            'message' => 'Failed Update',
+            'message' => 'Failed to Update Specification of MCB!',
         );
 
         if ($found) {
@@ -88,7 +88,7 @@ class SpecificationMcbController extends Controller
             $found->save();
 
             $response['status']  = true;
-            $response['message'] = 'Success Update';
+            $response['message'] = 'Success to Update Specification of MCB!';
         }
 
         return $response;
