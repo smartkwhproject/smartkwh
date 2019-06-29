@@ -33,7 +33,7 @@ $router->group([
         $router->post('create', 'UserController@create');
         $router->post('delete', 'UserController@delete');
         $router->post('update', 'UserController@update');
-
+	$router->get('kmean', 'UserController@kmeans');
     });
 
     // localhost:8000/api/group
