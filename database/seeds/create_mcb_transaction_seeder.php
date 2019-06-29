@@ -12,7 +12,7 @@ class create_mcb_transaction_seeder extends Seeder
      */
     public function run()
     {
-        for ($i = 0; $i < 31; $i++) {
+        for ($i = 0; $i < 10; $i++) {
             $mcbTransaction = new McbTransaction();
             $payload        = [
                 'datemcb'         => date('Y-m-d'),

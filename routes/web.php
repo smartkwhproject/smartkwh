@@ -12,7 +12,7 @@
  */
 
 $router->get('/', function () use ($router) {
-    return 'Hello There!';
+    return 'Welcome to Localhost Default Page from Smartpower Backend Devedit in visual code!';
 });
 
 //Generate Application Key
