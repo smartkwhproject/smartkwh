@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\CategoryMcb;
 use App\Models\McbTransaction;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class McbTransactionController extends Controller
 {
@@ -126,6 +127,48 @@ class McbTransactionController extends Controller
         //     ->first();
 
         return $category;
+    }
+
+    public function generateStatisticData(Request $request)
+    {
+        $startTime = date('H:i:s');
+        $endTime   = date('H:i:s', strtotime('+ 1 hour'));
+        $startDate = date('Y-m-d');
+        $endDate   = date('Y-m-d');
+
+        if ($request->has('start_time')) {
+            $startTime = $request->get('start_time');
+        }
+
+        if ($request->has('end_time')) {
+            $endTime = $request->get('end_time');
+        }
+
+        if ($request->has('start_date')) {
+            $startDate = $request->get('start_date');
+        }
+
+        if ($request->has('end_date')) {
+            $endDate = $request->get('end_date');
+        }
+
+        $stats = DB::select(DB::raw(
+            'SELECT a.datemcb, a.timemcb, a.kwh, b.mcb_name, c.block_name, d.building_name
+            FROM mcb_transaction a
+            INNER JOIN mcb b ON a.mcb_id = b.id
+            INNER JOIN `block` c ON a.block_id = c.id
+            INNER JOIN building d ON c.building_id = d.id
+            WHERE a.datemcb BETWEEN :start_date AND :end_date
+            AND a.timemcb BETWEEN :start_time AND :end_time'
+        ), [
+            'start_date' => $startDate,
+            'end_date'   => $endDate,
+            'start_time' => $startTime,
+            'end_time'   => $endTime,
+        ]);
+
+        return $stats;
+
     }
 
 }

@@ -12,11 +12,12 @@ class create_mcb_transaction_seeder extends Seeder
      */
     public function run()
     {
-        for ($i = 0; $i < 10; $i++) {
+        for ($i = 0; $i < 1000; $i++) {
             $mcbTransaction = new McbTransaction();
+            $dateTime       = date('Y-m-d H:i:s', strtotime("+ {$i} minute"));
             $payload        = [
-                'datemcb'         => date('Y-m-d'),
-                'timemcb'         => date('H:i:s'),
+                'datemcb'         => date('Y-m-d', strtotime($dateTime)),
+                'timemcb'         => date('H:i:s', strtotime($dateTime)),
                 'stream'          => rand(0, 200),
                 'voltage'         => rand(0, 200),
                 'kwh'             => rand(0, 200),

@@ -33,7 +33,7 @@ $router->group([
         $router->post('create', 'UserController@create');
         $router->post('delete', 'UserController@delete');
         $router->post('update', 'UserController@update');
-	$router->get('kmean', 'UserController@kmeans');
+        $router->get('kmean', 'UserController@kmeans');
     });
 
     // localhost:8000/api/group
@@ -127,6 +127,7 @@ $router->group([
         $router->post('delete', 'McbTransactionController@delete');
         $router->post('update', 'McbTransactionController@update');
         $router->get('getMcbTransaction', 'McbTransactionController@getMcbTransaction');
+        $router->get('statistic', 'McbTransactionController@generateStatisticData');
     });
 
     //localhost:8000/api/tes
