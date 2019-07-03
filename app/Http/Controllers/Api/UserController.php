@@ -97,7 +97,7 @@ class UserController extends Controller
 
     }
 
-  public function dataSetKMean()
+    public function dataSetKMean()
     {
         $dataSets = array(
             array('no' => 4, 'kwh' => 9, 'timestamp' => date('Y-m-d H:i:s', strtotime("+ 1 minute"))),
