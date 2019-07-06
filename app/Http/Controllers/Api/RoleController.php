@@ -22,7 +22,7 @@ class RoleController extends Controller
     public function view()
     {
         $role     = new Role();
-        $response = $role->paginate(1);
+        $response = $role->all();
 
         return $response;
     }

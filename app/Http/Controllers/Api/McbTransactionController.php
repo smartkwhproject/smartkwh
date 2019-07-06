@@ -23,7 +23,7 @@ class McbTransactionController extends Controller
     public function view()
     {
         $mcb_transaction = new McbTransaction();
-        $response        = $mcb_transaction->paginate(1);
+        $response        = $mcb_transaction->all();
 
         return $response;
     }

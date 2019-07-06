@@ -22,7 +22,7 @@ class UserController extends Controller
     public function view()
     {
         $user     = new User();
-        $response = $user->paginate(20);
+        $response = $user->all();
 
         return $response;
     }

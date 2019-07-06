@@ -22,7 +22,7 @@ class BlockController extends Controller
     public function view()
     {
         $block    = new Block();
-        $response = $block->paginate(1);
+        $response = $block->all();
 
         return $response;
     }
