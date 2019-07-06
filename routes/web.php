@@ -65,6 +65,14 @@ $router->group([
 
     });
 
+    // localhost:8000/api/auth
+    $router->group([
+        'prefix' => 'dashboard',
+    ], function ($router) {
+        $router->get('view', 'DashboardController@view');
+
+    });
+
     //localhost:8000/api/category_mcb
     $router->group([
         'prefix' => 'category_mcb',
