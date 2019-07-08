@@ -23,7 +23,7 @@ class McbTransactionController extends Controller
     public function view()
     {
         $mcb_transaction = new McbTransaction();
-        $response        = $mcb_transaction->paginate(1);
+        $response        = $mcb_transaction->all();
 
         return $response;
     }
@@ -132,7 +132,7 @@ class McbTransactionController extends Controller
     public function generateStatisticData(Request $request)
     {
         $startTime = date('H:i:s');
-        $endTime   = date('H:i:s', strtotime('+ 1 hour'));
+        $endTime   = date('H:i:s', strtotime('+ 5 minute'));
         $startDate = date('Y-m-d');
         $endDate   = date('Y-m-d');
 
@@ -153,7 +153,7 @@ class McbTransactionController extends Controller
         }
 
         $stats = DB::select(DB::raw(
-            'SELECT a.datemcb, a.timemcb, a.kwh, b.mcb_name, c.block_name, d.building_name
+            'SELECT a.datemcb, a.timemcb, a.kwh, a.voltage, b.mcb_name, c.block_name, d.building_name
             FROM mcb_transaction a
             INNER JOIN mcb b ON a.mcb_id = b.id
             INNER JOIN `block` c ON a.block_id = c.id

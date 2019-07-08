@@ -22,7 +22,7 @@ class BlockController extends Controller
     public function view()
     {
         $block    = new Block();
-        $response = $block->paginate(1);
+        $response = $block->all();
 
         return $response;
     }
@@ -93,6 +93,13 @@ class BlockController extends Controller
 
         return $response;
 
+    }
+
+    public function getBlockByBuildingId($buildingId)
+    {
+        $blockObj  = new Block();
+        $blockData = $blockObj->where('building_id', $buildingId)->get();
+        return $blockData;
     }
 
     //

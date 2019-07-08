@@ -22,7 +22,7 @@ class SpecificationMcbController extends Controller
     public function view()
     {
         $specification_mcb = new SpecificationMcb();
-        $response          = $specification_mcb->paginate(1);
+        $response          = $specification_mcb->all();
 
         return $response;
     }

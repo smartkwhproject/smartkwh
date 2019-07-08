@@ -22,7 +22,7 @@ class McbController extends Controller
     public function view()
     {
         $mcb      = new Mcb();
-        $response = $mcb->paginate(1);
+        $response = $mcb->all();
 
         return $response;
     }

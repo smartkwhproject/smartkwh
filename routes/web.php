@@ -103,9 +103,11 @@ $router->group([
         'prefix' => 'block',
     ], function ($router) {
         $router->get('view', 'BlockController@view');
+        $router->get('getBlockByBuildingId/{buildingId}', 'BlockController@getBlockByBuildingId');
         $router->post('create', 'BlockController@create');
         $router->post('delete', 'BlockController@delete');
         $router->post('update', 'BlockController@update');
+
     });
 
     // localhost:8000/api/mcb

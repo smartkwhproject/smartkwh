@@ -22,7 +22,7 @@ class CategoryMcbController extends Controller
     public function view()
     {
         $category_mcb = new CategoryMcb();
-        $response     = $category_mcb->paginate(1);
+        $response     = $category_mcb->all();
 
         return $response;
     }

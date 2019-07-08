@@ -22,7 +22,7 @@ class BuildingController extends Controller
     public function view()
     {
         $building = new Building();
-        $response = $building->paginate(1);
+        $response = $building->all();
 
         return $response;
     }

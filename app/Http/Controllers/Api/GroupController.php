@@ -22,7 +22,7 @@ class GroupController extends Controller
     public function view()
     {
         $group    = new Group();
-        $response = $group->paginate(1);
+        $response = $group->all();
 
         return $response;
     }
