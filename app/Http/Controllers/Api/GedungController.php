@@ -3,11 +3,11 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Models\Mcb;
+use App\Models\Gedung;
 use Illuminate\Http\Request;
 use Validator;
 
-class McbController extends Controller
+class GedungController extends Controller
 {
     /**
      * Create a new controller instance.
@@ -21,8 +21,8 @@ class McbController extends Controller
 
     public function view()
     {
-        $mcb      = new Mcb();
-        $response = $mcb->all();
+        $building = new Gedung();
+        $response = $building->all();
 
         return $response;
     }
@@ -31,12 +31,12 @@ class McbController extends Controller
     {
         $response = array(
             'status'  => false,
-            'message' => "Failed to Create MCB!",
+            'message' => "Failed to Create a Building!",
         );
 
         $validator = Validator::make($request->all(), [
-            'mcb_name'             => 'required',
-            'specification_mcb_id' => 'required',
+            'nama_gedung' => 'required',
+            'deskripsi'   => 'required',
         ]);
 
         if ($validator->fails()) {
@@ -45,18 +45,18 @@ class McbController extends Controller
             return $response;
         }
 
-        $mcb                       = new Mcb();
-        $mcb->mcb_name             = $request->mcb_name;
-        $mcb->specification_mcb_id = $request->specification_mcb_id;
-        $mcb->save();
+        $building              = new Gedung();
+        $building->nama_gedung = $request->nama_gedung;
+        $building->deskripsi   = $request->deskripsi;
+        $building->save();
 
-        return $mcb;
+        return $building;
     }
 
     public function delete(Request $request)
     {
-        $mcb   = new Mcb();
-        $found = $mcb->where('id', $request->id)->first();
+        $building = new Gedung();
+        $found    = $building->where('id', $request->id)->first();
 
         if ($found) {
             $found->delete();
@@ -64,7 +64,7 @@ class McbController extends Controller
 
         $response = array(
             'status'  => true,
-            'message' => 'Success to Delete MCB!',
+            'message' => 'Success to Delete a Building!',
         );
 
         return $response;
@@ -72,20 +72,20 @@ class McbController extends Controller
 
     public function update(Request $request)
     {
-        $mcb      = new Mcb();
-        $found    = $mcb->where('id', $request->id)->first();
+        $building = new Gedung();
+        $found    = $building->where('id', $request->id)->first();
         $response = array(
             'status'  => false,
-            'message' => 'Failed to Update MCB!',
+            'message' => 'Failed to Update a Building!',
         );
 
         if ($found) {
-            $found->mcb_name             = $request->mcb_name;
-            $found->specification_mcb_id = $request->specification_mcb_id;
+            $found->nama_gedung = $request->nama_gedung;
+            $found->deskripsi   = $request->deskripsi;
             $found->save();
 
             $response['status']  = true;
-            $response['message'] = 'Success to Update MCB!';
+            $response['message'] = 'Success to Update a Building';
         }
 
         return $response;

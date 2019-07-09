@@ -35,8 +35,8 @@ class GroupController extends Controller
         );
 
         $validator = Validator::make($request->all(), [
-            'name'        => 'required|unique:group',
-            'description' => 'required',
+            'nama'      => 'required|unique:group',
+            'deskripsi' => 'required',
         ]);
 
         if ($validator->fails()) {
@@ -45,9 +45,9 @@ class GroupController extends Controller
             return $response;
         }
 
-        $group              = new Group();
-        $group->name        = $request->name;
-        $group->description = $request->description;
+        $group            = new Group();
+        $group->nama      = $request->nama;
+        $group->deskripsi = $request->deskripsi;
         $group->save();
 
         return $group;
@@ -80,8 +80,8 @@ class GroupController extends Controller
         );
 
         if ($found) {
-            $found->name        = $request->name;
-            $found->description = $request->description;
+            $found->nama      = $request->nama;
+            $found->deskripsi = $request->deskripsi;
             $found->save();
 
             $response['status']  = true;

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateCategoryMcbTable extends Migration
+class CreateUserTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,12 @@ class CreateCategoryMcbTable extends Migration
      */
     public function up()
     {
-        Schema::create('category_mcb', function (Blueprint $table) {
+        Schema::create('user', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('category_name');
-            $table->string('min');
-            $table->string('max');
+            $table->string('nama');
+            $table->string('username')->unique();
+            $table->string('password');
+            $table->text('api_token');
             $table->timestamps();
         });
     }
@@ -29,6 +30,6 @@ class CreateCategoryMcbTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('category_mcb');
+        Schema::dropIfExists('user');
     }
 }

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateSpecificationMcbTable extends Migration
+class CreateGroupTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,10 @@ class CreateSpecificationMcbTable extends Migration
      */
     public function up()
     {
-        Schema::create('specification_mcb', function (Blueprint $table) {
+        Schema::create('group', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('colour');
-            $table->string('max_stream');
-            $table->string('max_voltage');
+            $table->string('nama');
+            $table->string('deskripsi');
             $table->timestamps();
         });
     }
@@ -29,6 +28,6 @@ class CreateSpecificationMcbTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('specification_mcb');
+        Schema::dropIfExists('group');
     }
 }
