@@ -34,26 +34,35 @@ class TransaksiMcbController extends Controller
             'message' => "Failed to Create Transaction Proses!",
         );
 
-        $mcb_transaction          = new TransaksiMcb();
-        $mcb_transaction->tglmcb  = isset($request->tglmcb) ? $request->tglmcb : date('Y-m-d');
-        $mcb_transaction->jammcb  = isset($request->jammcb) ? $request->jammcb : date('H:i:s');
-        $mcb_transaction->I1      = isset($request->I1) ? $request->I1 : 0;
-        $mcb_transaction->I2      = isset($request->I2) ? $request->I2 : 0;
-        $mcb_transaction->I3      = isset($request->I3) ? $request->I3 : 0;
-        $mcb_transaction->V1      = isset($request->V1) ? $request->V1 : 0;
-        $mcb_transaction->V2      = isset($request->V2) ? $request->V2 : 0;
-        $mcb_transaction->V3      = isset($request->V3) ? $request->V3 : 0;
-        $mcb_transaction->VAB     = isset($request->VAB) ? $request->VAB : 0;
-        $mcb_transaction->VAC     = isset($request->VAC) ? $request->VAC : 0;
-        $mcb_transaction->VBC     = isset($request->VBC) ? $request->VBC : 0;
-        $mcb_transaction->PF      = isset($request->PF) ? $request->PF : 0;
-        $mcb_transaction->wh      = isset($request->wh) ? $request->wh : 0;
-        $mcb_transaction->kwh     = isset($request->kwh) ? $request->kwh : 0;
-        $mcb_transaction->blok_id = $request->blok_id;
+        $mcb_transaction         = new TransaksiMcb();
+        $mcb_transaction->tglmcb = $request->get('tglmcb', date('Y-m-d'));
+        $mcb_transaction->jammcb = $request->get('jammcb', date('H:i:s'));
+        $mcb_transaction->I1     = $request->get('ia', 0);
+        $mcb_transaction->I2     = $request->get('ib', 0);
+        $mcb_transaction->I3     = $request->get('ic', 0);
+        $mcb_transaction->V1     = $request->get('va', 0);
+        $mcb_transaction->V2     = $request->get('vb', 0);
+        $mcb_transaction->V3     = $request->get('vc', 0);
+        $mcb_transaction->VAB    = $request->get('vab', 0);
+        $mcb_transaction->VAC    = $request->get('vac', 0);
+        $mcb_transaction->VBC    = $request->get('vbc', 0);
+        $mcb_transaction->PF     = $request->get('pfa', 0);
 
-        $mcb_transaction->save();
+        // todo add column pfa, to pfc
+        // WH di mikro = pt
+        $mcb_transaction->wh = $request->get('pt', 0);
+        // KWH di mikro = ep
+        $mcb_transaction->kwh     = $request->get('ep', 0);
+        $mcb_transaction->blok_id = $request->get('id');
 
-        return $mcb_transaction;
+        $save = $mcb_transaction->save();
+
+        if ($save) {
+            $response['status']  = true;
+            $response['message'] = 'Success Create Transaction';
+        }
+
+        return $response;
     }
 
     public function delete(Request $request)
