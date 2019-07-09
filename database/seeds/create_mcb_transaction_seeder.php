@@ -16,56 +16,30 @@ class create_mcb_transaction_seeder extends Seeder
             $mcbTransaction = new McbTransaction();
             $dateTime       = date('Y-m-d H:i:s', strtotime("+ {$i} minute"));
             $payload        = [
-                'datemcb'         => date('Y-m-d', strtotime($dateTime)),
-                'timemcb'         => date('H:i:s', strtotime($dateTime)),
-                'stream'          => rand(0, 200),
-                'voltage'         => rand(0, 200),
-                'kwh'             => rand(0, 200),
-                'wh'              => rand(0, 200),
-                'mcb_id'          => 1,
-                'block_id'        => 1,
-                'category_mcb_id' => rand(1, 4),
-                'stream_reff'     => rand(0, 200),
-                'voltage_reff'    => rand(0, 200),
-            ];
-            $mcbTransaction->createData($payload);
-        }
-        for ($i = 0; $i < 10; $i++) {
-            $mcbTransaction = new McbTransaction();
-            $dateTime       = date('Y-m-d H:i:s', strtotime("+ {$i} minute"));
-            $payload        = [
-                'datemcb'         => date('Y-m-d', strtotime($dateTime)),
-                'timemcb'         => date('H:i:s', strtotime($dateTime)),
-                'stream'          => rand(0, 200),
-                'voltage'         => rand(0, 200),
-                'kwh'             => rand(0, 200),
-                'wh'              => rand(0, 200),
-                'mcb_id'          => 2,
-                'block_id'        => 2,
-                'category_mcb_id' => rand(1, 4),
-                'stream_reff'     => rand(0, 200),
-                'voltage_reff'    => rand(0, 200),
-            ];
-            $mcbTransaction->createData($payload);
-        }
-        for ($i = 0; $i < 10; $i++) {
-            $mcbTransaction = new McbTransaction();
-            $dateTime       = date('Y-m-d H:i:s', strtotime("+ {$i} minute"));
-            $payload        = [
-                'datemcb'         => date('Y-m-d', strtotime($dateTime)),
-                'timemcb'         => date('H:i:s', strtotime($dateTime)),
-                'stream'          => rand(0, 200),
-                'voltage'         => rand(0, 200),
-                'kwh'             => rand(0, 200),
-                'wh'              => rand(0, 200),
-                'mcb_id'          => 3,
-                'block_id'        => 3,
-                'category_mcb_id' => rand(1, 4),
-                'stream_reff'     => rand(0, 200),
-                'voltage_reff'    => rand(0, 200),
-            ];
-            $mcbTransaction->createData($payload);
-        }
+                'block_id' => X, //X ubah menjadi id block
+                'tanggal'  => date('Y-m-d', strtotime($dateTime)),
+                'waktu'    => date('H:i:s', strtotime($dateTime)),
+                'va'       => rand(0, 200),
+                'vb'       => rand(0, 200),
+                'vc'       => rand(0, 200),
+                'vab'      => rand(0, 200),
+                'vbc'      => rand(0, 200),
+                'vca'      => rand(0, 200),
+                'ia'       => rand(0, 200),
+                'ib'       => rand(0, 200),
+                'ic'       => rand(0, 200),
+                'pa'       => rand(0, 200),
+                'pb'       => rand(0, 200),
+                'pc'       => rand(0, 200),
+                'pt'       => rand(0, 200),
+                'pfa'      => rand(0, 200),
+                'pfb'      => rand(0, 200),
+                'pfc'      => rand(0, 200),
+                'ep'       => rand(0, 200),
+                'eq'       => rand(0, 200),
 
+            ];
+            $mcbTransaction->createData($payload);
+        }
     }
 }

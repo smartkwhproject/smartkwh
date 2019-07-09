@@ -28,32 +28,43 @@ class TransaksiMcbController extends Controller
 
     public function create(Request $request)
     {
-        //$mcbCategory = new CategoryMcb();
+
         $response = array(
             'status'  => false,
             'message' => "Failed to Create Transaction Proses!",
         );
 
         $mcb_transaction          = new TransaksiMcb();
-        $mcb_transaction->tglmcb  = isset($request->tglmcb) ? $request->tglmcb : date('Y-m-d');
-        $mcb_transaction->jammcb  = isset($request->jammcb) ? $request->jammcb : date('H:i:s');
-        $mcb_transaction->I1      = isset($request->I1) ? $request->I1 : 0;
-        $mcb_transaction->I2      = isset($request->I2) ? $request->I2 : 0;
-        $mcb_transaction->I3      = isset($request->I3) ? $request->I3 : 0;
-        $mcb_transaction->V1      = isset($request->V1) ? $request->V1 : 0;
-        $mcb_transaction->V2      = isset($request->V2) ? $request->V2 : 0;
-        $mcb_transaction->V3      = isset($request->V3) ? $request->V3 : 0;
-        $mcb_transaction->VAB     = isset($request->VAB) ? $request->VAB : 0;
-        $mcb_transaction->VAC     = isset($request->VAC) ? $request->VAC : 0;
-        $mcb_transaction->VBC     = isset($request->VBC) ? $request->VBC : 0;
-        $mcb_transaction->PF      = isset($request->PF) ? $request->PF : 0;
-        $mcb_transaction->wh      = isset($request->wh) ? $request->wh : 0;
-        $mcb_transaction->kwh     = isset($request->kwh) ? $request->kwh : 0;
-        $mcb_transaction->blok_id = $request->blok_id;
+        $mcb_transaction->blok_id = $request->get('id');
+        $mcb_transaction->tanggal = $request->get('tanggal', date('Y-m-d'));
+        $mcb_transaction->waktu   = $request->get('waktu', date('H:i:s'));
+        $mcb_transaction->va      = $request->get('va', 0);
+        $mcb_transaction->vb      = $request->get('vb', 0);
+        $mcb_transaction->vc      = $request->get('vc', 0);
+        $mcb_transaction->vab     = $request->get('vab', 0);
+        $mcb_transaction->vbc     = $request->get('vbc', 0);
+        $mcb_transaction->vca     = $request->get('vca', 0);
+        $mcb_transaction->ia      = $request->get('ia', 0);
+        $mcb_transaction->ib      = $request->get('ib', 0);
+        $mcb_transaction->ic      = $request->get('ic', 0);
+        $mcb_transaction->pa      = $request->get('pa', 0);
+        $mcb_transaction->pb      = $request->get('pb', 0);
+        $mcb_transaction->pc      = $request->get('pc', 0);
+        $mcb_transaction->pt      = $request->get('pt', 0);
+        $mcb_transaction->pfa     = $request->get('pfa', 0);
+        $mcb_transaction->pfb     = $request->get('pfb', 0);
+        $mcb_transaction->pfc     = $request->get('pfc', 0);
+        $mcb_transaction->ep      = $request->get('ep', 0);
+        $mcb_transaction->eq      = $request->get('eq', 0);
 
-        $mcb_transaction->save();
+        $save = $mcb_transaction->save();
 
-        return $mcb_transaction;
+        if ($save) {
+            $response['status']  = true;
+            $response['message'] = 'Success Create Transaksi';
+        }
+
+        return $response;
     }
 
     public function delete(Request $request)
