@@ -28,38 +28,40 @@ class TransaksiMcbController extends Controller
 
     public function create(Request $request)
     {
-        //$mcbCategory = new CategoryMcb();
+
         $response = array(
             'status'  => false,
             'message' => "Failed to Create Transaction Proses!",
         );
 
-        $mcb_transaction         = new TransaksiMcb();
-        $mcb_transaction->tglmcb = $request->get('tglmcb', date('Y-m-d'));
-        $mcb_transaction->jammcb = $request->get('jammcb', date('H:i:s'));
-        $mcb_transaction->I1     = $request->get('ia', 0);
-        $mcb_transaction->I2     = $request->get('ib', 0);
-        $mcb_transaction->I3     = $request->get('ic', 0);
-        $mcb_transaction->V1     = $request->get('va', 0);
-        $mcb_transaction->V2     = $request->get('vb', 0);
-        $mcb_transaction->V3     = $request->get('vc', 0);
-        $mcb_transaction->VAB    = $request->get('vab', 0);
-        $mcb_transaction->VAC    = $request->get('vac', 0);
-        $mcb_transaction->VBC    = $request->get('vbc', 0);
-        $mcb_transaction->PF     = $request->get('pfa', 0);
-
-        // todo add column pfa, to pfc
-        // WH di mikro = pt
-        $mcb_transaction->wh = $request->get('pt', 0);
-        // KWH di mikro = ep
-        $mcb_transaction->kwh     = $request->get('ep', 0);
+        $mcb_transaction          = new TransaksiMcb();
         $mcb_transaction->blok_id = $request->get('id');
+        $mcb_transaction->tanggal = $request->get('tanggal', date('Y-m-d'));
+        $mcb_transaction->waktu   = $request->get('waktu', date('H:i:s'));
+        $mcb_transaction->va      = $request->get('va', 0);
+        $mcb_transaction->vb      = $request->get('vb', 0);
+        $mcb_transaction->vc      = $request->get('vc', 0);
+        $mcb_transaction->vab     = $request->get('vab', 0);
+        $mcb_transaction->vbc     = $request->get('vbc', 0);
+        $mcb_transaction->vca     = $request->get('vca', 0);
+        $mcb_transaction->ia      = $request->get('ia', 0);
+        $mcb_transaction->ib      = $request->get('ib', 0);
+        $mcb_transaction->ic      = $request->get('ic', 0);
+        $mcb_transaction->pa      = $request->get('pa', 0);
+        $mcb_transaction->pb      = $request->get('pb', 0);
+        $mcb_transaction->pc      = $request->get('pc', 0);
+        $mcb_transaction->pt      = $request->get('pt', 0);
+        $mcb_transaction->pfa     = $request->get('pfa', 0);
+        $mcb_transaction->pfb     = $request->get('pfb', 0);
+        $mcb_transaction->pfc     = $request->get('pfc', 0);
+        $mcb_transaction->ep      = $request->get('ep', 0);
+        $mcb_transaction->eq      = $request->get('eq', 0);
 
         $save = $mcb_transaction->save();
 
         if ($save) {
             $response['status']  = true;
-            $response['message'] = 'Success Create Transaction';
+            $response['message'] = 'Success Create Transaksi';
         }
 
         return $response;

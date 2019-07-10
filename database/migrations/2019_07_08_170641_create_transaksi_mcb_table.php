@@ -15,26 +15,32 @@ class CreateTransaksiMcbTable extends Migration
     {
         Schema::create('transaksi_mcb', function (Blueprint $table) {
             $table->increments('id');
-            $table->date('tglmcb');
-            $table->time('jammcb');
-            $table->double('I1');
-            $table->double('I2');
-            $table->double('I3');
-            $table->double('V1');
-            $table->double('V2');
-            $table->double('V3');
-            $table->double('VAB');
-            $table->double('VAC');
-            $table->double('VBC');
-            $table->double('PF');
-            $table->double('wh');
-            $table->double('kwh');
             $table->integer('blok_id')->unsigned();
             $table->foreign('blok_id')
                 ->references('id')
                 ->on('blok')
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
+            $table->date('tanggal');
+            $table->time('waktu');
+            $table->double('va');
+            $table->double('vb');
+            $table->double('vc');
+            $table->double('vab');
+            $table->double('vbc');
+            $table->double('vca');
+            $table->double('ia');
+            $table->double('ib');
+            $table->double('ic');
+            $table->double('pa');
+            $table->double('pb');
+            $table->double('pc');
+            $table->double('pt');
+            $table->double('pfa');
+            $table->double('pfb');
+            $table->double('pfc');
+            $table->double('ep');
+            $table->double('eq');
             $table->timestamps();
         });
     }

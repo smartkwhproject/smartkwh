@@ -69,8 +69,8 @@ $router->group([
     $router->group([
         'prefix' => 'dashboard',
     ], function ($router) {
-        $router->get('view', 'DashboardController@view');
-        //$router->get('view2', 'DashboardController@view2');
+        $router->get('dashboard', 'DashboardController@dashboard');
+        $router->get('history', 'DashboardController@history');
     });
 
     //localhost:8000/api/gedung
