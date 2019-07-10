@@ -15,12 +15,13 @@ class TransaksiMcb extends Model
      * @var array
      */
     protected $fillable = [
-        'tglmcb', 'jammcb',
-        'I1', 'I2', 'I3',
-        'V1', 'V2', 'V3',
-        'VAB', 'VAC', 'VBC',
-        'PF', 'wh', 'kwh',
-        'blok_id',
+        'blok_id', 'tanggal', 'waktu',
+        'va', 'vb', 'vc',
+        'vab', 'vbc', 'vca',
+        'ia', 'ib', 'ic',
+        'pa', 'pb', 'pc', 'pt',
+        'pfa', 'pfb', 'pfc',
+        'ep', 'eq',
     ];
 
     public function createData($payload)
