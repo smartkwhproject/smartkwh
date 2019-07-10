@@ -99,7 +99,8 @@ $router->group([
     $router->group([
         'prefix' => 'transaksi_mcb',
     ], function ($router) {
-        $router->get('view', 'TransaksiMcbController@view');
+        $router->get('viewall', 'TransaksiMcbController@viewall');
+        $router->get('viewpage', 'TransaksiMcbController@viewpage');
         $router->post('create', 'TransaksiMcbController@create');
         $router->post('delete', 'TransaksiMcbController@delete');
         $router->post('update', 'TransaksiMcbController@update');

@@ -18,10 +18,18 @@ class TransaksiMcbController extends Controller
         //
     }
 
-    public function view()
+    public function viewall()
     {
         $mcb_transaction = new TransaksiMcb();
         $response        = $mcb_transaction->all();
+
+        return $response;
+    }
+
+    public function viewpage()
+    {
+        $mcb_transaction = new TransaksiMcb();
+        $response        = $mcb_transaction->paginate(5);
 
         return $response;
     }
