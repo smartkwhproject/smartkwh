@@ -35,6 +35,7 @@ class BlokController extends Controller
 
     public function create(Request $request)
     {
+
         $response = array(
             'status'  => false,
             'message' => "Failed to Create a Block!",
@@ -56,6 +57,7 @@ class BlokController extends Controller
         $block->nama_blok = $request->nama_blok;
         $block->deskripsi = $request->deskripsi;
         $block->gedung_id = $request->gedung_id;
+
         $block->save();
 
         return $block;
