@@ -43,7 +43,7 @@ class TransaksiMcbController extends Controller
         );
 
         $mcb_transaction          = new TransaksiMcb();
-        $mcb_transaction->blok_id = $request->get('id');
+        $mcb_transaction->blok_id = $request->get('blok_id');
         $mcb_transaction->tanggal = $request->get('tanggal', date('Y-m-d'));
         $mcb_transaction->waktu   = $request->get('waktu', date('H:i:s'));
         $mcb_transaction->va      = $request->get('va', 0);
