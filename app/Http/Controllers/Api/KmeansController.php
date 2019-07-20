@@ -90,13 +90,19 @@ class KmeansController extends Controller
 
     public function pusatCluster($dataSet)
     {
-        // $rand0 = rand(0, $totalDataSet);
-        // $rand1 = rand(0, $totalDataSet);
-        // $rand2 = rand(0, $totalDataSet);
+        $totalDataSet = count($dataSet);
+        $rand0        = rand(0, $totalDataSet);
+        $rand1        = rand(0, $totalDataSet);
+        $rand2        = rand(0, $totalDataSet);
 
-        $cluster0 = $this->jumlahIterasi == 1 ? $dataSet[7] : $this->penampungCluster[0];
-        $cluster1 = $this->jumlahIterasi == 1 ? $dataSet[6] : $this->penampungCluster[1];
-        $cluster2 = $this->jumlahIterasi == 1 ? $dataSet[1] : $this->penampungCluster[2];
+        if (($rand0 != $rand1) && ($rand0 != $rand2) && ($rand1 != $rand2)) {
+            $cluster0 = $this->jumlahIterasi == 1 ? $dataSet[$rand0] : $this->penampungCluster[0];
+            $cluster1 = $this->jumlahIterasi == 1 ? $dataSet[$rand1] : $this->penampungCluster[1];
+            $cluster2 = $this->jumlahIterasi == 1 ? $dataSet[$rand2] : $this->penampungCluster[2];
+        } else {
+            $rand1 = rand(0, $totalDataSet);
+            $rand2 = rand(0, $totalDataSet);
+        }
 
         $kumpulanCluster = array(
             $cluster0,
