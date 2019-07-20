@@ -3,11 +3,11 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Models\Building;
+use App\Models\Gedung;
 use Illuminate\Http\Request;
 use Validator;
 
-class BuildingController extends Controller
+class GedungController extends Controller
 {
     /**
      * Create a new controller instance.
@@ -21,8 +21,8 @@ class BuildingController extends Controller
 
     public function view()
     {
-        $building = new Building();
-        $response = $building->paginate(1);
+        $building = new Gedung();
+        $response = $building->all();
 
         return $response;
     }
@@ -31,12 +31,12 @@ class BuildingController extends Controller
     {
         $response = array(
             'status'  => false,
-            'message' => "Failed",
+            'message' => "Failed to Create a Building!",
         );
 
         $validator = Validator::make($request->all(), [
-            'building_name' => 'required',
-            'description'   => 'required',
+            'nama_gedung' => 'required',
+            'deskripsi'   => 'required',
         ]);
 
         if ($validator->fails()) {
@@ -45,9 +45,9 @@ class BuildingController extends Controller
             return $response;
         }
 
-        $building                = new Building();
-        $building->building_name = $request->building_name;
-        $building->description   = $request->description;
+        $building              = new Gedung();
+        $building->nama_gedung = $request->nama_gedung;
+        $building->deskripsi   = $request->deskripsi;
         $building->save();
 
         return $building;
@@ -55,7 +55,7 @@ class BuildingController extends Controller
 
     public function delete(Request $request)
     {
-        $building = new Building();
+        $building = new Gedung();
         $found    = $building->where('id', $request->id)->first();
 
         if ($found) {
@@ -64,7 +64,7 @@ class BuildingController extends Controller
 
         $response = array(
             'status'  => true,
-            'message' => 'Success Delete',
+            'message' => 'Success to Delete a Building!',
         );
 
         return $response;
@@ -72,20 +72,20 @@ class BuildingController extends Controller
 
     public function update(Request $request)
     {
-        $building = new Building();
+        $building = new Gedung();
         $found    = $building->where('id', $request->id)->first();
         $response = array(
             'status'  => false,
-            'message' => 'Failed Update',
+            'message' => 'Failed to Update a Building!',
         );
 
         if ($found) {
-            $found->building_name = $request->building_name;
-            $found->description   = $request->description;
+            $found->nama_gedung = $request->nama_gedung;
+            $found->deskripsi   = $request->deskripsi;
             $found->save();
 
             $response['status']  = true;
-            $response['message'] = 'Success Update';
+            $response['message'] = 'Success to Update a Building';
         }
 
         return $response;

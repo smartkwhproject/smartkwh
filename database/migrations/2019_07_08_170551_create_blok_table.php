@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateMcbTable extends Migration
+class CreateBlokTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,14 @@ class CreateMcbTable extends Migration
      */
     public function up()
     {
-        Schema::create('mcb', function (Blueprint $table) {
+        Schema::create('blok', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('mcb_name');
-            $table->integer('specification_mcb_id')->unsigned();
-            $table->foreign('specification_mcb_id')
+            $table->string('nama_blok');
+            $table->string('deskripsi');
+            $table->integer('gedung_id')->unsigned();
+            $table->foreign('gedung_id')
                 ->references('id')
-                ->on('specification_mcb')
+                ->on('gedung')
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
             $table->timestamps();
@@ -33,6 +34,6 @@ class CreateMcbTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('mcb');
+        Schema::dropIfExists('blok');
     }
 }

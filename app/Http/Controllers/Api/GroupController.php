@@ -22,7 +22,7 @@ class GroupController extends Controller
     public function view()
     {
         $group    = new Group();
-        $response = $group->paginate(1);
+        $response = $group->all();
 
         return $response;
     }
@@ -31,12 +31,12 @@ class GroupController extends Controller
     {
         $response = array(
             'status'  => false,
-            'message' => "Failed",
+            'message' => "Failed to Create a Group!",
         );
 
         $validator = Validator::make($request->all(), [
-            'name'        => 'required|unique:group',
-            'description' => 'required',
+            'nama'      => 'required|unique:group',
+            'deskripsi' => 'required',
         ]);
 
         if ($validator->fails()) {
@@ -45,9 +45,9 @@ class GroupController extends Controller
             return $response;
         }
 
-        $group              = new Group();
-        $group->name        = $request->name;
-        $group->description = $request->description;
+        $group            = new Group();
+        $group->nama      = $request->nama;
+        $group->deskripsi = $request->deskripsi;
         $group->save();
 
         return $group;
@@ -64,7 +64,7 @@ class GroupController extends Controller
 
         $response = array(
             'status'  => true,
-            'message' => 'Success Delete',
+            'message' => 'Success to Delete a Group!',
         );
 
         return $response;
@@ -76,16 +76,16 @@ class GroupController extends Controller
         $found    = $group->where('id', $request->id)->first();
         $response = array(
             'status'  => false,
-            'message' => 'Failed Update',
+            'message' => 'Failed to Update a Group!',
         );
 
         if ($found) {
-            $found->name        = $request->name;
-            $found->description = $request->description;
+            $found->nama      = $request->nama;
+            $found->deskripsi = $request->deskripsi;
             $found->save();
 
             $response['status']  = true;
-            $response['message'] = 'Success Update';
+            $response['message'] = 'Success to Update a Group!';
         }
 
         return $response;

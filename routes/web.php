@@ -12,7 +12,7 @@
  */
 
 $router->get('/', function () use ($router) {
-    return 'Hello';
+    return 'Welcome to Localhost Default Page from Smartpower Backend Devedit in visual code!';
 });
 
 //Generate Application Key
@@ -27,14 +27,13 @@ $router->group([
 
     // localhost:8000/api/user
     $router->group([
-        'prefix'     => 'user',
-        'middleware' => 'auth',
+        'prefix' => 'user',
     ], function ($router) {
         $router->get('view', 'UserController@view');
         $router->post('create', 'UserController@create');
         $router->post('delete', 'UserController@delete');
         $router->post('update', 'UserController@update');
-
+        //$router->get('kmean', 'UserController@kmeans');
     });
 
     // localhost:8000/api/group
@@ -66,68 +65,48 @@ $router->group([
 
     });
 
-    //localhost:8000/api/category_mcb
+    // localhost:8000/api/dashboard
     $router->group([
-        'prefix' => 'category_mcb',
+        'prefix' => 'dashboard',
     ], function ($router) {
-        $router->get('view', 'Category_McbController@view');
-        $router->post('create', 'Category_McbController@create');
-        $router->post('delete', 'Category_McbController@delete');
-        $router->post('update', 'Category_McbController@update');
-
+        $router->get('dashboard', 'DashboardController@dashboard');
+        //$router->get('history', 'DashboardController@history');
+        $router->post('history', 'DashboardController@history');
     });
 
-    //localhost:8000/api/building
+    //localhost:8000/api/gedung
     $router->group([
-        'prefix' => 'building',
+        'prefix' => 'gedung',
     ], function ($router) {
-        $router->get('view', 'BuildingController@view');
-        $router->post('create', 'BuildingController@create');
-        $router->post('delete', 'BuildingController@delete');
-        $router->post('update', 'BuildingController@update');
-
-    });
-
-    //localhost:8000/api/specification_mcb
-    $router->group([
-        'prefix' => 'specification_mcb',
-    ], function ($router) {
-        $router->get('view', 'Specification_McbController@view');
-        $router->post('create', 'Specification_McbController@create');
-        $router->post('delete', 'Specification_McbController@delete');
-        $router->post('update', 'Specification_McbController@update');
+        $router->get('view', 'GedungController@view');
+        $router->post('create', 'GedungController@create');
+        $router->post('delete', 'GedungController@delete');
+        $router->post('update', 'GedungController@update');
 
     });
 
     // localhost:8000/api/block
     $router->group([
-        'prefix' => 'block',
+        'prefix' => 'blok',
     ], function ($router) {
-        $router->get('view', 'BlockController@view');
-        $router->post('create', 'BlockController@create');
-        $router->post('delete', 'BlockController@delete');
-        $router->post('update', 'BlockController@update');
+        $router->get('view', 'BlokController@view');
+        $router->post('create', 'BlokController@create');
+        $router->post('delete', 'BlokController@delete');
+        $router->post('update', 'BlokController@update');
+        $router->get('getBlockByBuildingId/{buildingId}', 'BlokController@getBlockByBuildingId');
     });
 
-    // localhost:8000/api/mcb
+    // localhost:8000/api/transaksi_mcb
     $router->group([
-        'prefix' => 'mcb',
+        'prefix' => 'transaksi_mcb',
     ], function ($router) {
-        $router->get('view', 'McbController@view');
-        $router->post('create', 'McbController@create');
-        $router->post('delete', 'McbController@delete');
-        $router->post('update', 'McbController@update');
-    });
-
-    // localhost:8000/api/mcb_transaction
-    $router->group([
-        'prefix' => 'mcb_transaction',
-    ], function ($router) {
-        $router->get('view', 'Mcb_TransactionController@view');
-        $router->post('create', 'Mcb_TransactionController@create');
-        $router->post('delete', 'Mcb_TransactionController@delete');
-        $router->post('update', 'Mcb_TransactionController@update');
-        $router->get('getMcbTransaction', 'Mcb_TransactionController@getMcbTransaction');
+        $router->get('viewall', 'TransaksiMcbController@viewall');
+        $router->get('viewpage', 'TransaksiMcbController@viewpage');
+        $router->post('create', 'TransaksiMcbController@create');
+        $router->post('delete', 'TransaksiMcbController@delete');
+        $router->post('update', 'TransaksiMcbController@update');
+        // $router->get('caracteristic', 'TransaksiMcbController@caracteristic');
+        // $router->get('statistic', 'TransaksiMcbController@generateStatisticData');
     });
 
     //localhost:8000/api/tes

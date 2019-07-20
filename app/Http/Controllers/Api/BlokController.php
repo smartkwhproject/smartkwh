@@ -3,11 +3,11 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Models\Block;
+use App\Models\Blok;
 use Illuminate\Http\Request;
 use Validator;
 
-class BlockController extends Controller
+class BlokController extends Controller
 {
     /**
      * Create a new controller instance.
@@ -18,26 +18,33 @@ class BlockController extends Controller
     {
         //
     }
+    public function getBlockByBuildingId($buildingId)
+    {
+        $blockObj  = new Blok();
+        $blockData = $blockObj->where('gedung_id', $buildingId)->get();
+        return $blockData;
+    }
 
     public function view()
     {
-        $block    = new Block();
-        $response = $block->paginate(1);
+        $block    = new Blok();
+        $response = $block->all();
 
         return $response;
     }
 
     public function create(Request $request)
     {
+
         $response = array(
             'status'  => false,
-            'message' => "Failed",
+            'message' => "Failed to Create a Block!",
         );
 
         $validator = Validator::make($request->all(), [
-            'block_name'  => 'required',
-            'description' => 'required',
-            'building_id' => 'required',
+            'nama_blok' => 'required',
+            'deskripsi' => 'required',
+            'gedung_id' => 'required',
         ]);
 
         if ($validator->fails()) {
@@ -46,10 +53,11 @@ class BlockController extends Controller
             return $response;
         }
 
-        $block              = new Block();
-        $block->block_name  = $request->block_name;
-        $block->description = $request->description;
-        $block->building_id = $request->building_id;
+        $block            = new Blok();
+        $block->nama_blok = $request->nama_blok;
+        $block->deskripsi = $request->deskripsi;
+        $block->gedung_id = $request->gedung_id;
+
         $block->save();
 
         return $block;
@@ -57,7 +65,7 @@ class BlockController extends Controller
 
     public function delete(Request $request)
     {
-        $block = new Block();
+        $block = new Blok();
         $found = $block->where('id', $request->id)->first();
 
         if ($found) {
@@ -66,7 +74,7 @@ class BlockController extends Controller
 
         $response = array(
             'status'  => true,
-            'message' => 'Success Delete',
+            'message' => 'Success to Delete a Block!',
         );
 
         return $response;
@@ -74,21 +82,21 @@ class BlockController extends Controller
 
     public function update(Request $request)
     {
-        $block    = new Block();
+        $block    = new Blok();
         $found    = $block->where('id', $request->id)->first();
         $response = array(
             'status'  => false,
-            'message' => 'Failed Update',
+            'message' => 'Failed to Update a Block!',
         );
 
         if ($found) {
-            $found->block_name  = $request->block_name;
-            $found->description = $request->description;
-            $found->building_id = $request->building_id;
+            $found->nama_blok = $request->nama_blok;
+            $found->deskripsi = $request->deskripsi;
+            $found->gedung_id = $request->gedung_id;
             $found->save();
 
             $response['status']  = true;
-            $response['message'] = 'Success Update';
+            $response['message'] = 'Success to Update a Block!';
         }
 
         return $response;
