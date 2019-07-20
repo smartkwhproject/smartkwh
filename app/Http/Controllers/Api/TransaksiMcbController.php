@@ -8,14 +8,15 @@ use Illuminate\Http\Request;
 
 class TransaksiMcbController extends Controller
 {
+    private $transaksiMcb;
     /**
      * Create a new controller instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(TransaksiMcb $transaksiMcb)
     {
-        //
+        $this->transaksiMcb = $transaksiMcb;
     }
 
     public function viewall()
@@ -42,6 +43,14 @@ class TransaksiMcbController extends Controller
             'message' => "Failed to Create Transaction Proses!",
         );
 
+        $before   = $this->transaksiMcb->orderBy('created_at', 'DESC')->first();
+        $epBefore = 0;
+        if ($before) {
+            $epBefore = $before->ep;
+        }
+
+        $currentEp = $request->get('ep', 0);
+
         $mcb_transaction          = new TransaksiMcb();
         $mcb_transaction->blok_id = $request->get('blok_id');
         $mcb_transaction->tanggal = $request->get('tanggal', date('Y-m-d'));
@@ -62,8 +71,9 @@ class TransaksiMcbController extends Controller
         $mcb_transaction->pfa     = $request->get('pfa', 0);
         $mcb_transaction->pfb     = $request->get('pfb', 0);
         $mcb_transaction->pfc     = $request->get('pfc', 0);
-        $mcb_transaction->ep      = $request->get('ep', 0);
+        $mcb_transaction->ep      = $currentEp;
         $mcb_transaction->eq      = $request->get('eq', 0);
+        $mcb_transaction->kwh     = $currentEp - $epBefore;
 
         $save = $mcb_transaction->save();
 

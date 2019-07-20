@@ -21,7 +21,7 @@ class TransaksiMcb extends Model
         'ia', 'ib', 'ic',
         'pa', 'pb', 'pc', 'pt',
         'pfa', 'pfb', 'pfc',
-        'ep', 'eq',
+        'ep', 'eq', 'kwh',
     ];
 
     public function createData($payload)
