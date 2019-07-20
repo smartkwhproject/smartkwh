@@ -109,6 +109,14 @@ $router->group([
         // $router->get('statistic', 'TransaksiMcbController@generateStatisticData');
     });
 
+    $router->group([
+        'prefix' => 'kmeans',
+    ], function ($router) {
+        $router->get('dataSets', 'KmeansController@dataSetKMean');
+        // $router->get('caracteristic', 'TransaksiMcbController@caracteristic');
+        // $router->get('statistic', 'TransaksiMcbController@generateStatisticData');
+    });
+
     //localhost:8000/api/tes
     $router->get('/tes', function () {
         return 'Hello from API Tes';

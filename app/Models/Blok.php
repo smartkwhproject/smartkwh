@@ -18,4 +18,9 @@ class Blok extends Model
         'nama_blok', 'deskripsi', 'gedung_id',
     ];
 
+    public function gedung()
+    {
+        return $this->hasOne(Gedung::class, 'id', 'gedung_id');
+    }
+
 }

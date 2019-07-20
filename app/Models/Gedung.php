@@ -18,4 +18,9 @@ class Gedung extends Model
         'nama_gedung', 'deskripsi',
     ];
 
+    public function blok()
+    {
+        return $this->hasMany(Blok::class, 'gedung_id', 'id');
+    }
+
 }

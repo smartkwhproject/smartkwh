@@ -29,4 +29,9 @@ class TransaksiMcb extends Model
         return TransaksiMcb::create($payload);
     }
 
+    public function blok()
+    {
+        return $this->hasOne(Blok::class, 'id', 'blok_id');
+    }
+
 }
