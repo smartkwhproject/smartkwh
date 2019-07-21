@@ -116,6 +116,12 @@ $router->group([
         // $router->get('caracteristic', 'TransaksiMcbController@caracteristic');
         // $router->get('statistic', 'TransaksiMcbController@generateStatisticData');
     });
+    $router->group([
+        'prefix' => 'tempfinal',
+    ], function ($router) {
+        $router->get('view', 'TempFinalController@view');
+        $router->post('create', 'TempFinalController@create');
+    });
 
     //localhost:8000/api/tes
     $router->get('/tes', function () {
