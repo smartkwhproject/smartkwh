@@ -15,7 +15,7 @@ class DashboardController extends Controller
                     a.ia, a.ib, a.ic,
                     a.pa, a.pb, a.pc, a.pt,
                     a.pfa, a.pfb, a.pfc,
-                    a.ep, a.eq,
+                    a.ep, a.eq, a.kwh,
                     b.nama_blok,
                     c.nama_gedung
             FROM transaksi_mcb a
@@ -35,15 +35,15 @@ class DashboardController extends Controller
             $comments = Blok::select('id', 'nama_blok', 'deskripsi')->where('gedung_id', $data->id)->get();
             foreach ($comments as $datamcb) {
                 $mcb          = TransaksiMcb::select('ep', 'waktu')->where('blok_id', $datamcb->id)->where('tanggal', $request->tanggal)->get();
-                $kwhTerakhir  = TransaksiMcb::select('ep')->orderBy('tanggal', 'DESC')->orderBy('waktu', 'DESC')->where('blok_id', $datamcb->id)->first();
-                $datamcb->kwh = $kwhTerakhir->ep;
+                $kwhTerakhir  = TransaksiMcb::select('ep', 'kwh')->orderBy('tanggal', 'DESC')->orderBy('waktu', 'DESC')->where('blok_id', $datamcb->id)->first();
+                $datamcb->kwh = $kwhTerakhir->kwh;
                 $datamcb->mcb = $mcb;
             }
             $data->blok = $comments;
         }
 
         return response()->json($response, 200);
-        
+
     }
 
 }

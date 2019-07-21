@@ -30,7 +30,15 @@ class KmeansController extends Controller
     {
         $hasilAkhir = array();
         $bulan      = $request->get('bulan');
-        $dataSets   = DB::select(
+        $select     = DB::select(DB::raw('select hasil, bulan from tmp_final WHERE bulan = ? LIMIT 1'), [$bulan]);
+        if (count($select) > 0) {
+            // foreach ($select as $key => $value) {
+            //     $value->hasil = json_decode($value->hasil);
+            // }
+            return response()->json(json_decode($select[0]->hasil));
+        }
+
+        $dataSets = DB::select(
             DB::raw("SELECT
                         a.waktu,
                         b.gedung_id,
@@ -51,6 +59,8 @@ class KmeansController extends Controller
             array_push($hasilAkhir, $this->loopingIterasi($dataSets));
             $this->jumlahIterasi += 1;
         } while (!$this->selesaiIterasi);
+
+        // $insert = DB::insert('insert into tmp_final (hasil, bulan) values (?, ?)', [json_encode($hasilAkhir), $bulan]);
 
         return response()->json($hasilAkhir);
     }
@@ -90,19 +100,35 @@ class KmeansController extends Controller
 
     public function pusatCluster($dataSet)
     {
-        $totalDataSet = count($dataSet);
-        $rand0        = rand(0, $totalDataSet);
-        $rand1        = rand(0, $totalDataSet);
-        $rand2        = rand(0, $totalDataSet);
+        $totalDataSet = count($dataSet) - 1;
+        $rand0        = abs(rand(0, $totalDataSet / 3));
+        $rand1        = abs(rand($totalDataSet / 3, ($totalDataSet * 2) / 3));
+        $rand2        = abs(rand(($totalDataSet * 2) / 3, $totalDataSet));
 
-        if (($rand0 != $rand1) && ($rand0 != $rand2) && ($rand1 != $rand2)) {
-            $cluster0 = $this->jumlahIterasi == 1 ? $dataSet[$rand0] : $this->penampungCluster[0];
-            $cluster1 = $this->jumlahIterasi == 1 ? $dataSet[$rand1] : $this->penampungCluster[1];
-            $cluster2 = $this->jumlahIterasi == 1 ? $dataSet[$rand2] : $this->penampungCluster[2];
-        } else {
+        $masihSama = true;
+        while ($masihSama) {
+            $rand0 = rand(0, $totalDataSet);
             $rand1 = rand(0, $totalDataSet);
             $rand2 = rand(0, $totalDataSet);
+
+            $masihSama = false;
+
+            if ($rand0 == $rand1) {
+                $masihSama = true;
+            }
+
+            if ($rand1 == $rand2) {
+                $masihSama = true;
+            }
+
+            if ($rand0 == $rand2) {
+                $masihSama = true;
+            }
         }
+
+        $cluster0 = $this->jumlahIterasi == 1 ? $dataSet[$rand0] : $this->penampungCluster[0];
+        $cluster1 = $this->jumlahIterasi == 1 ? $dataSet[$rand1] : $this->penampungCluster[1];
+        $cluster2 = $this->jumlahIterasi == 1 ? $dataSet[$rand2] : $this->penampungCluster[2];
 
         $kumpulanCluster = array(
             $cluster0,

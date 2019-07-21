@@ -73,7 +73,9 @@ class TransaksiMcbController extends Controller
         $mcb_transaction->pfc     = $request->get('pfc', 0);
         $mcb_transaction->ep      = $currentEp;
         $mcb_transaction->eq      = $request->get('eq', 0);
-        $mcb_transaction->kwh     = $currentEp - $epBefore;
+        // $mcb_transaction->kwh     = (float) $currentEp - $epBefore;
+        $mcb_transaction->kwh = $request->get('kwh', (float) $currentEp - $epBefore);
+        // var_dump($before);
 
         $save = $mcb_transaction->save();
 
