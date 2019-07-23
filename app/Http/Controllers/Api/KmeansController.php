@@ -29,38 +29,62 @@ class KmeansController extends Controller
     public function dataSetKMean(Request $request)
     {
         $hasilAkhir = array();
-        $bulan      = $request->get('bulan');
-        $select     = DB::select(DB::raw('select hasil, bulan from tmp_final WHERE bulan = ? LIMIT 1'), [$bulan]);
-        if (count($select) > 0) {
-            // foreach ($select as $key => $value) {
-            //     $value->hasil = json_decode($value->hasil);
-            // }
-            return response()->json(json_decode($select[0]->hasil));
-        }
 
-        $dataSets = DB::select(
-            DB::raw("SELECT
-                        a.waktu,
-                        b.gedung_id,
-                        a.blok_id,
-                        a.pt,
-                        a.kwh,
-                        '' AS pusatCluster,
-                        0 AS jarakTerpendek,
-                        0 AS masukKeCluster
-                    FROM transaksi_mcb a
-                    INNER JOIN blok b ON a.blok_id = b.id
-                    INNER JOIN gedung c ON b.gedung_id = c.id
-                    WHERE MONTH(a.tanggal) = {$bulan}"
-            )
+        $bulan   = $request->get('bulan');
+        $gedung  = $request->get('gedung', 0);
+        $refresh = $request->get('refresh', 0);
+
+        $select = DB::select(
+            DB::raw('select hasil, bulan from tmp_final WHERE bulan = ? AND gedung_id = ? LIMIT 1'
+            ), [$bulan, $gedung]
         );
 
+        // check parameter if data need to be refreshed
+        // if data is not going to be refrehed then check
+        // if data is already exist in db
+
+        if ($refresh == '0') {
+            if (count($select) > 0) {
+                return response()->json(json_decode($select[0]->hasil));
+            }
+        }
+
+        $query = "SELECT
+                    a.waktu,
+                    b.gedung_id,
+                    a.blok_id,
+                    a.pt,
+                    a.kwh,
+                    '' AS pusatCluster,
+                    0 AS jarakTerpendek,
+                    0 AS masukKeCluster
+                FROM transaksi_mcb a
+                INNER JOIN blok b ON a.blok_id = b.id
+                INNER JOIN gedung c ON b.gedung_id = c.id
+                WHERE MONTH(a.tanggal) = {$bulan}";
+
+        if ($gedung != 0) {
+            $query .= " AND b.gedung_id = {$gedung}";
+        }
+
+        $dataSets = DB::select(DB::raw($query));
         do {
             array_push($hasilAkhir, $this->loopingIterasi($dataSets));
             $this->jumlahIterasi += 1;
         } while (!$this->selesaiIterasi);
 
-        // $insert = DB::insert('insert into tmp_final (hasil, bulan) values (?, ?)', [json_encode($hasilAkhir), $bulan]);
+        // if need to refresh database
+        if ($refresh == '1') {
+            DB::table('tmp_final')
+                ->where('bulan', $bulan)
+                ->where('gedung_id', $gedung)
+                ->delete();
+        }
+
+        DB::insert(
+            'insert into tmp_final (hasil, bulan, gedung_id) values (?, ?, ?)',
+            [json_encode($hasilAkhir), $bulan, $gedung]
+        );
 
         return response()->json($hasilAkhir);
     }
