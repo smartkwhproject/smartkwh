@@ -82,10 +82,11 @@ $router->group([
         'prefix' => 'gedung',
     ], function ($router) {
         $router->get('view', 'GedungController@view');
+        $router->get('listgedung', 'GedungController@listgedung');
         $router->post('create', 'GedungController@create');
         $router->post('delete', 'GedungController@delete');
+        $router->post('deleteblok', 'GedungController@deleteblok');
         $router->post('update', 'GedungController@update');
-
     });
 
     // localhost:8000/api/block
@@ -93,6 +94,7 @@ $router->group([
         'prefix' => 'blok',
     ], function ($router) {
         $router->get('view', 'BlokController@view');
+        $router->post('listblok', 'BlokController@listblok');
         $router->post('create', 'BlokController@create');
         $router->post('delete', 'BlokController@delete');
         $router->post('update', 'BlokController@update');

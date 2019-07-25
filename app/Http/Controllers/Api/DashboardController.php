@@ -132,37 +132,41 @@ class DashboardController extends Controller
         );
         return response()->json($xx, 200);
     }
-    public function view()
+
+     public function view()
     {
         $building = new Gedung();
-        $blok     = new Blok();
-        $response = $building->select('id', 'nama_gedung', 'deskripsi')->get();
-        $index    = 1;
-        foreach ($response as $data) {
-            $comments = Blok::select('id', 'nama_blok', 'deskripsi')->where('gedung_id', $data->id)->get();
-            foreach ($comments as $datamcb) {
+        $blok = new Blok();
+        $response = $building->select('id','nama_gedung','deskripsi')->get();
+        $index = 1;
+        foreach($response as $data){
+            $comments = Blok::select('id','nama_blok','deskripsi')->where('gedung_id', $data->id)->get();
+            foreach($comments as $datamcb){
                 // $mcb = TransaksiMcb::select('blok_id','va','vb','vc','vab',
                 //                             'vbc','vca','ia','ib',
                 //                             'ic','pa','pb','pc','pt',
                 //                             'pfa','pfb','pfc','ep','eq','tanggal','waktu')->orderBy('tanggal', 'DESC')->orderBy('waktu', 'DESC')->where('blok_id', $datamcb->id)->first();
-                $kwhTerakhir     = TransaksiMcb::select('ep')->orderBy('tanggal', 'DESC')->orderBy('waktu', 'DESC')->where('blok_id', $datamcb->id)->first();
+                $kwhTerakhir = TransaksiMcb::select('ep')->orderBy('tanggal', 'DESC')->orderBy('waktu', 'DESC')->where('blok_id', $datamcb->id)->first();
                 $kwhSblmTerakhir = TransaksiMcb::select('ep')->orderBy('tanggal', 'DESC')->orderBy('waktu', 'DESC')->where('blok_id', $datamcb->id)->skip(1)->first();
+                $lastupdate = TransaksiMcb::select('tanggal', 'waktu')->orderBy('tanggal', 'DESC')->orderBy('waktu', 'DESC')->where('blok_id', $datamcb->id)->first();
                 // $datamcb->mcb = $mcb;
-                if (strlen($kwhSblmTerakhir) > 0) {
-                    $satu           = $kwhSblmTerakhir->ep;
-                    $dua            = $kwhTerakhir->ep;
-                    $datamcb->kwh   = $dua - $satu;
+                if(strlen($kwhSblmTerakhir) > 0){
+                    $satu = $kwhSblmTerakhir->ep;
+                    $dua = $kwhTerakhir->ep;
+                    $datamcb->kwh = $dua - $satu;
                     $data->totalKWH = $data->totalKWH + $dua - $satu;
                 } else {
-                    $datamcb->kwh   = "";
+                    $datamcb->kwh = "";
                     $data->totalKWH = 0;
                 }
+                $data->lastUpdate = $lastupdate;
             }
             $data->namablock = $comments;
-
+            
         }
         return response()->json($response, 200);
     }
+    
     public function detailpopup(Request $request)
     {
         $transaksi = new TransaksiMcb();

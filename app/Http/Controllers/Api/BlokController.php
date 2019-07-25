@@ -33,6 +33,13 @@ class BlokController extends Controller
         return $response;
     }
 
+    public function listblok(Request $request)
+    {
+        $block    = new Blok();
+        $response = $block->select('id', 'nama_blok', 'gedung_id')->where('gedung_id', $request->gedung_id)->get();
+        return response()->json($response, 200);
+    }
+
     public function create(Request $request)
     {
 
@@ -63,23 +70,19 @@ class BlokController extends Controller
         return $block;
     }
 
-    public function delete(Request $request)
+   public function delete(Request $request)
     {
         $block = new Blok();
         $found = $block->where('id', $request->id)->first();
-
         if ($found) {
             $found->delete();
         }
-
         $response = array(
             'status'  => true,
             'message' => 'Success to Delete a Block!',
         );
-
         return $response;
     }
-
     public function update(Request $request)
     {
         $block    = new Blok();
