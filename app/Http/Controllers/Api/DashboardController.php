@@ -52,52 +52,118 @@ class DashboardController extends Controller
     public function history(Request $request)
     {
         $building = new Gedung();
-        $blok     = new Blok();
         $response = $building->select('id', 'nama_gedung')->get();
         foreach ($response as $data) {
             $comments = Blok::select('id', 'nama_blok', 'deskripsi')->where('gedung_id', $data->id)->get();
             foreach ($comments as $datamcb) {
-                $mcb             = TransaksiMcb::select('ep', 'waktu')->where('blok_id', $datamcb->id)->where('tanggal', $request->tanggal)->get();
-                $kwhTerakhir     = TransaksiMcb::select('ep')->orderBy('tanggal', 'DESC')->orderBy('waktu', 'DESC')->where('blok_id', $datamcb->id)->first();
-                $kwhSblmTerakhir = TransaksiMcb::select('ep')->orderBy('tanggal', 'DESC')->orderBy('waktu', 'DESC')->where('blok_id', $datamcb->id)->skip(1)->first();
-                //ep non object
-                //$datamcb->kwh    = $kwhTerakhir->ep;
+                $kwhTerakhir = TransaksiMcb::select('ep')
+                    ->orderBy('tanggal', 'DESC')
+                    ->orderBy('waktu', 'DESC')
+                    ->where('blok_id', $datamcb->id)
+                    ->first();
                 $datamcb->kwh = isset($kwhTerakhir->ep) ? $kwhTerakhir->ep : 0;
-                //$dBlok->ep = isset($mcb->ep) ? $mcb->ep : 0;
-                $datamcb->mcb = $mcb;
             }
             $data->blok = $comments;
         }
         return response()->json($response, 200);
     }
+
     public function filterHistory(Request $request)
     {
         $building = new Gedung();
-        $blok     = new Blok();
-        $response = $building->select('id', 'nama_gedung')->where('id', $request->gedung_id)->get();
-        foreach ($response as $data) {
-            $comments = Blok::select('id', 'nama_blok', 'deskripsi')->where('gedung_id', $data->id)->get();
-            foreach ($comments as $datamcb) {
-                $mcb             = TransaksiMcb::select('ep', 'waktu')->where('blok_id', $datamcb->id)->where('tanggal', $request->tanggal)->get();
-                $kwhTerakhir     = TransaksiMcb::select('ep')->orderBy('tanggal', 'DESC')->orderBy('waktu', 'DESC')->where('blok_id', $datamcb->id)->first();
-                $kwhSblmTerakhir = TransaksiMcb::select('ep')->orderBy('tanggal', 'DESC')->orderBy('waktu', 'DESC')->where('blok_id', $datamcb->id)->skip(1)->first();
-                $datamcb->kwh    = $kwhTerakhir->ep;
-                $datamcb->mcb    = $mcb;
+        $gedung   = $building->select('id', 'nama_gedung')
+            ->where('id', $request->gedung_id)
+            ->first();
+
+        $response = collect([
+            'id'          => $gedung->id,
+            'nama_gedung' => $gedung->nama_gedung,
+            'blok'        => [],
+        ]);
+
+        $comments = Blok::select('id', 'nama_blok', 'deskripsi')
+            ->where('gedung_id', $request->gedung_id)
+            ->get();
+
+        $block = collect([]);
+
+        foreach ($comments as $datamcb) {
+            $mcb = TransaksiMcb::select('ep', 'waktu')
+                ->where('blok_id', $datamcb->id)
+                ->where('tanggal', $request->tanggal)
+                ->get();
+
+            $ctr = count($mcb);
+
+            for ($i = 0; $i < $ctr; $i++) {
+                if ($i == 0) {
+                    $mcb[$i]['kwh'] = $mcb[$i]['ep'];
+                } else {
+                    $mcb[$i]['kwh'] = abs($mcb[$i]['ep'] - $mcb[$i - 1]['ep']);
+                }
             }
-            $data->blok = $comments;
+
+            $datamcb->mcb = $mcb;
+            $block->push($datamcb);
         }
+
+        $response->put('blok', $block);
+
         return response()->json($response, 200);
     }
-    public function total()
+
+    public function filterTotal(Request $request)
     {
         $building = new Gedung();
+        $gedung   = $building->select('id', 'nama_gedung')
+            ->where('id', $request->gedung_id)
+            ->first();
+
+        $response = collect([
+            'id'          => $gedung->id,
+            'nama_gedung' => $gedung->nama_gedung,
+            'blok'        => [],
+        ]);
+
+        $comments = Blok::select('id', 'nama_blok', 'deskripsi')
+            ->where('gedung_id', $request->gedung_id)
+            ->get();
+
+        $block = collect([]);
+
+        foreach ($comments as $datamcb) {
+            $mcb = TransaksiMcb::select('ep', 'waktu')
+                ->where('blok_id', $datamcb->id)
+                ->whereRaw("MONTH(tanggal) = $request->bulan")
+                ->get();
+
+            $ctr      = count($mcb);
+            $kwhTotal = 0;
+
+            for ($i = 0; $i < $ctr; $i++) {
+                if ($i == 0) {
+                    $mcb[$i]['kwh'] = $mcb[$i]['ep'];
+                } else {
+                    $mcb[$i]['kwh'] = abs($mcb[$i]['ep'] - $mcb[$i - 1]['ep']);
+                }
+                $kwhTotal += $mcb[$i]['kwh'];
+            }
+
+            $datamcb->kwhTotal = $kwhTotal;
+            $block->push($datamcb);
+        }
+
+        $response->put('blok', $block);
+        return response()->json($response, 200);
+
+    }
+
+    public function totalBackup()
+    {
+
+        $building = new Gedung();
         $gedung   = $building->select('id', 'nama_gedung')->get();
-        // $gedung = DB::table('gedung')
-        //             ->select('id')
-        //             ->get();
-        // $blok = DB::table('blok')
-        //     ->select('id')
-        //     ->get();
+
         foreach ($gedung as $dGedung) {
             $dataDate = DB::table('transaksi_mcb')
                 ->select('tanggal')
@@ -125,6 +191,7 @@ class DashboardController extends Controller
                 $dDate->blok = $blok;
             }
         }
+
         $xx = array(
             'status'  => 'success',
             'message' => 'Data Berhasil Ditampilkan',
@@ -133,40 +200,40 @@ class DashboardController extends Controller
         return response()->json($xx, 200);
     }
 
-     public function view()
+    public function view()
     {
         $building = new Gedung();
-        $blok = new Blok();
-        $response = $building->select('id','nama_gedung','deskripsi')->get();
-        $index = 1;
-        foreach($response as $data){
-            $comments = Blok::select('id','nama_blok','deskripsi')->where('gedung_id', $data->id)->get();
-            foreach($comments as $datamcb){
+        $blok     = new Blok();
+        $response = $building->select('id', 'nama_gedung', 'deskripsi')->get();
+        $index    = 1;
+        foreach ($response as $data) {
+            $comments = Blok::select('id', 'nama_blok', 'deskripsi')->where('gedung_id', $data->id)->get();
+            foreach ($comments as $datamcb) {
                 // $mcb = TransaksiMcb::select('blok_id','va','vb','vc','vab',
                 //                             'vbc','vca','ia','ib',
                 //                             'ic','pa','pb','pc','pt',
                 //                             'pfa','pfb','pfc','ep','eq','tanggal','waktu')->orderBy('tanggal', 'DESC')->orderBy('waktu', 'DESC')->where('blok_id', $datamcb->id)->first();
-                $kwhTerakhir = TransaksiMcb::select('ep')->orderBy('tanggal', 'DESC')->orderBy('waktu', 'DESC')->where('blok_id', $datamcb->id)->first();
+                $kwhTerakhir     = TransaksiMcb::select('ep')->orderBy('tanggal', 'DESC')->orderBy('waktu', 'DESC')->where('blok_id', $datamcb->id)->first();
                 $kwhSblmTerakhir = TransaksiMcb::select('ep')->orderBy('tanggal', 'DESC')->orderBy('waktu', 'DESC')->where('blok_id', $datamcb->id)->skip(1)->first();
-                $lastupdate = TransaksiMcb::select('tanggal', 'waktu')->orderBy('tanggal', 'DESC')->orderBy('waktu', 'DESC')->where('blok_id', $datamcb->id)->first();
+                $lastupdate      = TransaksiMcb::select('tanggal', 'waktu')->orderBy('tanggal', 'DESC')->orderBy('waktu', 'DESC')->where('blok_id', $datamcb->id)->first();
                 // $datamcb->mcb = $mcb;
-                if(strlen($kwhSblmTerakhir) > 0){
-                    $satu = $kwhSblmTerakhir->ep;
-                    $dua = $kwhTerakhir->ep;
-                    $datamcb->kwh = $dua - $satu;
+                if (strlen($kwhSblmTerakhir) > 0) {
+                    $satu           = $kwhSblmTerakhir->ep;
+                    $dua            = $kwhTerakhir->ep;
+                    $datamcb->kwh   = $dua - $satu;
                     $data->totalKWH = $data->totalKWH + $dua - $satu;
                 } else {
-                    $datamcb->kwh = "";
+                    $datamcb->kwh   = "";
                     $data->totalKWH = 0;
                 }
                 $data->lastUpdate = $lastupdate;
             }
             $data->namablock = $comments;
-            
+
         }
         return response()->json($response, 200);
     }
-    
+
     public function detailpopup(Request $request)
     {
         $transaksi = new TransaksiMcb();
@@ -188,4 +255,5 @@ class DashboardController extends Controller
             'message'                            => 'Data Berhasil Ditampilkan',
             'data'                               => $response), 200);
     }
+
 }

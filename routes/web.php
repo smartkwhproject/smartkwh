@@ -33,7 +33,8 @@ $router->group([
         $router->post('create', 'UserController@create');
         $router->post('delete', 'UserController@delete');
         $router->post('update', 'UserController@update');
-        //$router->get('kmean', 'UserController@kmeans');
+        // yang baru
+        $router->post('reset', 'UserController@resetPassword');
     });
 
     // localhost:8000/api/group
@@ -71,10 +72,13 @@ $router->group([
     ], function ($router) {
         $router->get('view', 'DashboardController@view');
         $router->get('dashboard', 'DashboardController@dashboard');
-        $router->post('history', 'DashboardController@history');
-        $router->post('filterHistory', 'DashboardController@filterHistory');
+        $router->get('history', 'DashboardController@history');
         $router->post('detailpopup', 'DashboardController@detailpopup');
         $router->get('total', 'DashboardController@total');
+
+        //yang baru
+        $router->post('filterHistory', 'DashboardController@filterHistory');
+        $router->post('filterTotal', 'DashboardController@filterTotal');
     });
 
     //localhost:8000/api/gedung
