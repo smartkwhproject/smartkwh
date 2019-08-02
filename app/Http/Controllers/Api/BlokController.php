@@ -33,6 +33,15 @@ class BlokController extends Controller
         return $response;
     }
 
+    public function tampilkan_blok() {
+        $result = mysqli_query($conn,"SELECT * FROM blok");
+        $i=0;
+        while($data = mysqli_fetch_assoc($result)) {
+            $data2[$i++] = $data;
+        }
+        return $data2;
+    }
+
     public function listblok(Request $request)
     {
         $block    = new Blok();
