@@ -20,6 +20,8 @@ $router->get('/key', function () {
     return str_random(32);
 });
 
+$router->get('/history', 'Api\DashboardController@testHistory');
+
 $router->group([
     'prefix'    => 'api',
     'namespace' => 'Api',
@@ -45,7 +47,6 @@ $router->group([
         $router->post('create', 'GroupController@create');
         $router->post('delete', 'GroupController@delete');
         $router->post('update', 'GroupController@update');
-
     });
 
     // localhost:8000/api/role
@@ -70,6 +71,7 @@ $router->group([
     $router->group([
         'prefix' => 'dashboard',
     ], function ($router) {
+        $router->post('detailpopup', 'DashboardController@detailpopup');
         $router->get('view', 'DashboardController@view');
         $router->get('dashboard', 'DashboardController@dashboard');
         $router->get('history', 'DashboardController@history');

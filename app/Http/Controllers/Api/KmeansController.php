@@ -50,6 +50,7 @@ class KmeansController extends Controller
         }
 
         $query = "SELECT
+                    a.tanggal, 
                     a.waktu,
                     b.gedung_id,
                     a.blok_id,

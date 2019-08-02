@@ -44,6 +44,7 @@ class GedungController extends Controller
         return response()->json($response, 200);
     }
 
+
     public function create(Request $request)
     {
         $response = array(
@@ -64,8 +65,8 @@ class GedungController extends Controller
         $building              = new Gedung();
         $building->nama_gedung = $request->nama_gedung;
         $building->deskripsi   = $request->deskripsi;
-        $building->save();
         $datablok = $request->get('listblok');
+        $building->save();
         foreach($datablok as $blocklist) {
             $block = new Blok();
             $block->gedung_id = $building->id;
@@ -73,6 +74,7 @@ class GedungController extends Controller
             $block->deskripsi = $blocklist['deskripsi'];
             $block->save();
         };
+        
         $result = array(
             'code' => 200,
             'status' => true,
