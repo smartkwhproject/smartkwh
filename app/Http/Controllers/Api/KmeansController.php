@@ -30,45 +30,63 @@ class KmeansController extends Controller
     {
         $hasilAkhir = array();
 
-        $bulan   = $request->get('bulan');
+        $startDate = $request->get('start_date');
+        $endDate   = $request->get('end_date');
+
         $gedung  = $request->get('gedung', 0);
         $refresh = $request->get('refresh', 0);
 
-        $select = DB::select(
-            DB::raw('select hasil, bulan from tmp_final WHERE bulan = ? AND gedung_id = ? LIMIT 1'
-            ), [$bulan, $gedung]
-        );
+        $query = "SELECT hasil, start_date, end_date
+                FROM tmp_final
+                WHERE start_date = '{$startDate}'
+                AND end_date = '{$endDate}'
+                AND gedung_id = {$gedung}";
+
+        $query .= ' ORDER BY id DESC LIMIT 1';
+
+        $select = DB::select(DB::raw($query));
 
         // check parameter if data need to be refreshed
         // if data is not going to be refrehed then check
         // if data is already exist in db
 
-        if ($refresh == '0') {
+        if (!$refresh) {
             if (count($select) > 0) {
                 return response()->json(json_decode($select[0]->hasil));
             }
         }
 
         $query = "SELECT
-                    a.tanggal, 
+                    a.tanggal,
                     a.waktu,
-                    b.gedung_id,
                     a.blok_id,
                     a.pt,
                     a.kwh,
+                    b.gedung_id,
+                    c.nama_gedung,
+                    b.nama_blok,
                     '' AS pusatCluster,
                     0 AS jarakTerpendek,
-                    0 AS masukKeCluster
+                    0 AS masukKeCluster,
+                    0 AS hasilIterasi
                 FROM transaksi_mcb a
                 INNER JOIN blok b ON a.blok_id = b.id
                 INNER JOIN gedung c ON b.gedung_id = c.id
-                WHERE MONTH(a.tanggal) = {$bulan}";
+                WHERE a.tanggal BETWEEN '{$startDate}' AND '{$endDate}'
+                ";
 
         if ($gedung != 0) {
             $query .= " AND b.gedung_id = {$gedung}";
         }
 
+        $query .= " ORDER BY a.id ASC ";
+
         $dataSets = DB::select(DB::raw($query));
+
+        if (count($dataSets) === 0) {
+            return response()->json(array('message' => 'Data Tidak Ditemukan'), 404);
+        }
+
         do {
             array_push($hasilAkhir, $this->loopingIterasi($dataSets));
             $this->jumlahIterasi += 1;
@@ -77,14 +95,22 @@ class KmeansController extends Controller
         // if need to refresh database
         if ($refresh == '1') {
             DB::table('tmp_final')
-                ->where('bulan', $bulan)
+                ->where('start_date', $startDate)
+                ->where('end_date', $endDate)
                 ->where('gedung_id', $gedung)
                 ->delete();
         }
+        
+        // $response = array();
+        // foreach ($hasilAkhir as $value) {
+        //     if ($value) {
+        //         array_push($response, $value);
+        //     }
+        // }
 
         DB::insert(
-            'insert into tmp_final (hasil, bulan, gedung_id) values (?, ?, ?)',
-            [json_encode($hasilAkhir), $bulan, $gedung]
+            'insert into tmp_final (hasil, start_date, end_date, gedung_id) values (?, ?, ?, ?)',
+            [json_encode($hasilAkhir), $startDate, $endDate, $gedung]
         );
 
         return response()->json($hasilAkhir);
@@ -93,7 +119,6 @@ class KmeansController extends Controller
     public function loopingIterasi($dataSets)
     {
         $totalPenampungLokasi = count($this->penampungLokasiCluster);
-
         $pusatCluster         = $this->pusatCluster($dataSets);
         $jarak                = $this->perhitunganJarak($dataSets, $pusatCluster);
         $hasilIterasi         = $this->masukKeCluster($jarak);
@@ -113,47 +138,131 @@ class KmeansController extends Controller
             }
         }
 
+        //tampilan yang diberikan...//
         $hasilAkhir = array(
             'dataSets'        => $dataSets,
             'pusatCluster'    => $pusatCluster,
             'hasilIterasi'    => $hasilIterasi,
             'groupingCluster' => $pusatClusterTambahan,
         );
+        
+        // if($this->selesaiIterasi) {
+        //     $hasilAkhir = null;    
+        // }
 
         return $hasilAkhir;
     }
 
     public function pusatCluster($dataSet)
     {
-        $totalDataSet = count($dataSet) - 1;
-        $rand0        = abs(rand(0, $totalDataSet / 3));
-        $rand1        = abs(rand($totalDataSet / 3, ($totalDataSet * 2) / 3));
-        $rand2        = abs(rand(($totalDataSet * 2) / 3, $totalDataSet));
+        $totalDataSet = count($dataSet);
+        // $rand0        = abs(rand(0, $totalDataSet / 3));
+        // $rand1        = abs(rand($totalDataSet / 3, ($totalDataSet * 2) / 3));
+        // $rand2        = abs(rand(($totalDataSet * 2) / 3, $totalDataSet));
 
-        $masihSama = true;
-        while ($masihSama) {
-            $rand0 = rand(0, $totalDataSet);
-            $rand1 = rand(0, $totalDataSet);
-            $rand2 = rand(0, $totalDataSet);
+        // $masihSama = true;
+        // while ($masihSama) {
+        //     $rand0 = rand(0, $totalDataSet);
+        //     $rand1 = rand(0, $totalDataSet);
+        //     $rand2 = rand(0, $totalDataSet);
 
-            $masihSama = false;
+        //     $masihSama = false;
 
-            if ($rand0 == $rand1) {
-                $masihSama = true;
-            }
+        //     if ($rand0 == $rand1) {
+        //         $masihSama = true;
+        //     }
 
-            if ($rand1 == $rand2) {
-                $masihSama = true;
-            }
+        //     if ($rand1 == $rand2) {
+        //         $masihSama = true;
+        //     }
 
-            if ($rand0 == $rand2) {
-                $masihSama = true;
+        //     if ($rand0 == $rand2) {
+        //         $masihSama = true;
+        //     }
+        // }
+
+        // $cluster0 = $this->jumlahIterasi == 1 ? $dataSet[$rand0] : $this->penampungCluster[0];
+        // $cluster1 = $this->jumlahIterasi == 1 ? $dataSet[$rand1] : $this->penampungCluster[1];
+        // $cluster2 = $this->jumlahIterasi == 1 ? $dataSet[$rand2] : $this->penampungCluster[2];
+        // $cluster0 = $this->jumlahIterasi == 1 ? $dataSet[12] : $this->penampungCluster[0];
+        // $cluster1 = $this->jumlahIterasi == 1 ? $dataSet[4] : $this->penampungCluster[1];
+        // $cluster2 = $this->jumlahIterasi == 1 ? $dataSet[26] : $this->penampungCluster[2];
+
+        //mulai--------------------------------------------------------------------------------------------------------------
+        $nilaiMin = 0;
+        $nilaiMax = 0;
+        for ($i = 0; $i < $totalDataSet; $i++) {
+            if ($i == 0) {
+                $nilaiMin = $dataSet[$i]->kwh;
+            } else if ($i > 0) {
+                if ($dataSet[$i]->kwh <= $nilaiMin) {
+                    $nilaiMin = $dataSet[$i]->kwh;
+                } else {
+                    $nilaiMin = $nilaiMin;
+                }
             }
         }
 
-        $cluster0 = $this->jumlahIterasi == 1 ? $dataSet[$rand0] : $this->penampungCluster[0];
-        $cluster1 = $this->jumlahIterasi == 1 ? $dataSet[$rand1] : $this->penampungCluster[1];
-        $cluster2 = $this->jumlahIterasi == 1 ? $dataSet[$rand2] : $this->penampungCluster[2];
+        // for ($k=0; $k < $totalDataSet; $k++) {
+        //     if ($k == 0) {
+        //         $nilaiMax = $dataSet[$k]->kwh;
+        //     }
+        //     else if ($k > 0) {
+        //         if ($dataSet[$k]->kwh >= $nilaiMax) {
+        //             $nilaiMax = $dataSet[$k]->kwh;
+        //         } else {
+        //             $nilaiMax = $nilaiMax;
+        //         }
+        //     }
+        // }
+
+        for ($i = 0; $i < $totalDataSet; $i++) {
+            if ($i == 0) {
+                $nilaiMax = $dataSet[$i]->kwh;
+            } else if ($i > 0) {
+                if ($dataSet[$i]->kwh >= $nilaiMax) {
+                    $nilaiMax = $dataSet[$i]->kwh;
+                } else {
+                    $nilaiMax = $nilaiMax;
+                }
+            }
+        }
+        $selisihNilai = $nilaiMax - $nilaiMin;
+        $range        = ($selisihNilai) / 3;
+        $range2       = $nilaiMin + $range;
+        $range1       = $range2 + $range;
+        $range0       = $range1 + $range;
+
+        $random0 = array();
+        $random1 = array();
+        $random2 = array();
+        for ($j = 0; $j < $totalDataSet; $j++) {
+            if ($dataSet[$j]->kwh <= $range2) {
+                $random2[] = $dataSet[$j];
+            }
+            if (($dataSet[$j]->kwh >= $range2) && ($dataSet[$j]->kwh <= $range1)) {
+                $random1[] = $dataSet[$j];
+            }
+            if (($dataSet[$j]->kwh >= $range1) && ($dataSet[$j]->kwh <= $range0)) {
+                $random0[] = $dataSet[$j];
+            }
+
+        }
+        // dd($random0);
+
+        $totalRandom0 = count($random0) - 1;
+        $totalRandom1 = count($random1) - 1;
+        $totalRandom2 = count($random2) - 1;
+
+        $rand0 = rand(0, $totalRandom0);
+        $rand1 = rand(0, $totalRandom1);
+        $rand2 = rand(0, $totalRandom2);
+
+        $cluster0 = $this->jumlahIterasi == 1 ? $random0[$rand0] : $this->penampungCluster[0];
+        $cluster1 = $this->jumlahIterasi == 1 ? $random1[$rand1] : $this->penampungCluster[1];
+        $cluster2 = $this->jumlahIterasi == 1 ? $random2[$rand2] : $this->penampungCluster[2];
+        // dd($random1[$rand1]);
+        // selesai--------------------------------------------------------------------------------------------------------------
 
         $kumpulanCluster = array(
             $cluster0,
@@ -263,85 +372,4 @@ class KmeansController extends Controller
 
         return $this->penampungCluster;
     }
-
-    // public function generateSentroids($dataSets)
-    // {
-    //     $min = 0;
-    //     $max = count($dataSets) - 1;
-
-    //     $sentroids = array();
-
-    //     // for ($i = 0; $i < 3; $i++) {
-    //     //     $random = rand($min, $max);
-    //     //     array_push($sentroids, $dataSets[$random]);
-    //     // }
-
-    //     array_push($sentroids, $dataSets[0]);
-    //     array_push($sentroids, $dataSets[2]);
-    //     array_push($sentroids, $dataSets[4]);
-
-    //     return $sentroids;
-
-    // }
-
-    // public function clusteringKmean($sentroidDatasets)
-    // {
-    //     $sentroids  = $sentroidDatasets['sentroids'];
-    //     $sentroids1 = $sentroids[0]['cluster'];
-    //     $sentroids2 = $sentroids[1]['cluster'];
-    //     $sentroids3 = $sentroids[2]['cluster'];
-    //     $temp       = 0;
-    //     $temp1      = 0;
-    //     $final      = array();
-
-    //     for ($i = 0; $i < 5; $i++) {
-    //         if ($sentroids1[$i] < $sentroids2[$i]) {
-    //             $temp = $sentroids1[$i];
-    //         } elseif ($sentroids1[$i] > $sentroids2[$i]) {
-    //             $temp = $sentroids2[$i];
-    //         }
-
-    //         if ($temp < $sentroids3[$i]) {
-    //             $temp1 = $temp;
-    //         } else {
-    //             $temp1 = $sentroids3[$i];
-    //         }
-
-    //         array_push($final, $temp1);
-    //     }
-
-    //     return $final;
-    // }
-
-    // public function kmeans()
-    // {
-    //     $dataSets  = $this->dataSetKMean();
-    //     $sentroids = $this->generateSentroids($dataSets);
-    //     $cluster   = array();
-    //     // karena data sentroid sudah pasti 3
-    //     for ($i = 0; $i < 3; $i++) {
-    //         $ctrDatasets              = count($dataSets);
-    //         $sentroids[$i]['cluster'] = array();
-    //         for ($j = 0; $j < $ctrDatasets; $j++) {
-    //             $mutationKwh  = pow($dataSets[$j]['kwh'] - $sentroids[$i]['kwh'], 2);
-    //             $mutationNo   = pow($dataSets[$j]['no'] - $sentroids[$i]['no'], 2);
-    //             $mutationSum  = $mutationKwh + $mutationNo;
-    //             $mutationSqrt = sqrt($mutationSum);
-    //             // array_push($sentroids[$i]['cluster'], array(
-    //             //     'sentroidsKwh'  => $mutationKwh,
-    //             //     'sentroidsNo'   => $mutationNo,
-    //             //     'sentroidsSum'  => $mutationSum,
-    //             //     'sentroidsSqrt' => $mutationSqrt,
-    //             // ));
-    //             array_push($sentroids[$i]['cluster'], $mutationSqrt);
-    //         }
-    //     }
-
-    //     $sentroidDatasets = array('dataSets' => $dataSets, 'sentroids' => $sentroids);
-
-    //     $final = $this->clusteringKmean($sentroidDatasets);
-
-    //     return $final;
-    // }
-
 }

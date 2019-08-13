@@ -35,6 +35,8 @@ class AuthController extends Controller
                 $payloadResponse['status']  = true;
                 $payloadResponse['message'] = 'Login Berhasil!';
                 $payloadResponse['token']   = $token;
+                $payloadResponse['userID']   = $user['id'];
+                $payloadResponse['name']   = $user['nama'];
                 $statusCode                 = 200;
             }
         }

@@ -20,7 +20,8 @@ $router->get('/key', function () {
     return str_random(32);
 });
 
-$router->get('/history', 'Api\DashboardController@testHistory');
+$router->get('/history', 'Api\DashboardController@getHistoryMonitoring');
+$router->get('/block', 'Api\DashboardController@getBlock');
 
 $router->group([
     'prefix'    => 'api',
@@ -74,9 +75,10 @@ $router->group([
         $router->post('detailpopup', 'DashboardController@detailpopup');
         $router->get('view', 'DashboardController@view');
         $router->get('dashboard', 'DashboardController@dashboard');
-        $router->get('history', 'DashboardController@history');
+        $router->post('history', 'DashboardController@history');
         $router->post('detailpopup', 'DashboardController@detailpopup');
-        $router->get('total', 'DashboardController@total');
+        $router->post('total', 'DashboardController@total');
+        $router->post('tambahblok', 'DashboardController@tambahBlok');
 
         //yang baru
         $router->post('filterHistory', 'DashboardController@filterHistory');

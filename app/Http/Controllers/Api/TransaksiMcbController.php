@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\TransaksiMcb;
-use Illuminate\Http\Request;
 use Exception;
+use Illuminate\Http\Request;
 
 class TransaksiMcbController extends Controller
 {
@@ -44,15 +44,15 @@ class TransaksiMcbController extends Controller
                 'status'  => false,
                 'message' => "Failed to Create Transaction Proses!",
             );
-    
+
             $before   = $this->transaksiMcb->orderBy('created_at', 'DESC')->first();
             $epBefore = 0;
             if ($before) {
                 $epBefore = $before->ep;
             }
-    
+
             $currentEp = $request->get('ep', 0);
-    
+
             $mcb_transaction          = new TransaksiMcb();
             $mcb_transaction->blok_id = $request->get('blok_id');
             $mcb_transaction->tanggal = $request->get('tanggal', date('Y-m-d'));
@@ -78,20 +78,20 @@ class TransaksiMcbController extends Controller
             // $mcb_transaction->kwh     = (float) $currentEp - $epBefore;
             $mcb_transaction->kwh = $request->get('kwh', (float) $currentEp - $epBefore);
             // var_dump($before);
-    
+
             $save = $mcb_transaction->save();
-    
+
             if ($save) {
                 $response['status']  = true;
                 $response['message'] = 'Success Create Transaksi';
             }
-    
-            return $response;   
+
+            return $response;
         } catch (Exception $e) {
             return response()->json(array(
                 'message' => $e->getMessage(),
-                'line' => $e->getLine()
-            ))
+                'line'    => $e->getLine(),
+            ));
         }
     }
 

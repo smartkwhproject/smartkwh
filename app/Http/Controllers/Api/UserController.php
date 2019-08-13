@@ -56,12 +56,13 @@ class UserController extends Controller
         return $user;
     }
 
+
     public function delete(Request $request)
     {
         $user  = new User();
         $found = $user->where('id', $request->id)->first();
 
-        if ($found) {
+        if ($found && $request->id != 1) {
             $found->delete();
         }
 
@@ -72,7 +73,7 @@ class UserController extends Controller
 
         return $response;
     }
-
+    
     public function update(Request $request)
     {
         $user     = new User();
